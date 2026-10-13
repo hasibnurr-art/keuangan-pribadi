@@ -1,0 +1,32 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --color-brand-50: #eef4fb;
+  --color-brand-100: #d6e4f5;
+  --color-brand-200: #adc8eb;
+  --color-brand-500: #2f6db5;
+  --color-brand-600: #245a99;
+  --color-brand-700: #1d4a7f;
+  --color-brand-800: #173b66;
+  --color-brand-900: #102a4a;
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-slate-50 text-slate-900 antialiased;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-500;
+  }
+  dialog::backdrop {
+    background: rgb(15 23 42 / 0.45);
+  }
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}

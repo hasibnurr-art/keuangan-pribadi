@@ -1,0 +1,35 @@
+{
+  "app": "keuangan-pribadi",
+  "formatVersion": 1,
+  "schemaVersion": 1,
+  "exportedAt": "2026-10-13T14:30:00.000Z",
+  "counts": { "accounts": 3, "categories": 3, "transactions": 6, "budgetLimits": 1, "bills": 1, "billSkips": 0, "settings": 3 },
+  "data": {
+    "accounts": [
+      { "id": "bca", "name": "BCA", "group": "asset", "kind": "bank", "openingBalance": 2000000, "openingDate": "2026-09-01", "includeInAvailable": true, "archived": false, "sortOrder": 0, "createdAt": "2026-09-01T00:00:00.000Z", "updatedAt": "2026-09-01T00:00:00.000Z" },
+      { "id": "gopay", "name": "GoPay", "group": "asset", "kind": "ewallet", "openingBalance": 0, "openingDate": "2026-09-01", "includeInAvailable": true, "archived": false, "sortOrder": 1, "createdAt": "2026-09-01T00:00:00.000Z", "updatedAt": "2026-09-01T00:00:00.000Z" },
+      { "id": "kartu", "name": "Kartu BCA", "group": "liability", "kind": "credit_card", "openingBalance": 0, "openingDate": "2026-09-01", "includeInAvailable": false, "archived": false, "sortOrder": 2, "createdAt": "2026-09-01T00:00:00.000Z", "updatedAt": "2026-09-01T00:00:00.000Z" }
+    ],
+    "categories": [
+      { "id": "cat-makan", "name": "Makan & Minum", "type": "expense", "icon": "🍜", "color": "orange", "archived": false, "sortOrder": 0 },
+      { "id": "cat-biaya", "name": "Bunga & Biaya Admin", "type": "expense", "icon": "🏦", "color": "slate", "archived": false, "sortOrder": 1 },
+      { "id": "cat-gaji", "name": "Gaji", "type": "income", "icon": "💼", "color": "emerald", "archived": false, "sortOrder": 0 }
+    ],
+    "transactions": [
+      { "id": "t1", "type": "income", "date": "2026-10-01", "amount": 8000000, "accountId": "bca", "categoryId": "cat-gaji", "createdAt": "2026-10-01T01:00:00.000Z", "updatedAt": "2026-10-01T01:00:00.000Z" },
+      { "id": "t2", "type": "expense", "date": "2026-10-02", "amount": 500000, "accountId": "kartu", "categoryId": "cat-makan", "note": "=SUM(A1:A9)", "createdAt": "2026-10-02T01:00:00.000Z", "updatedAt": "2026-10-02T01:00:00.000Z" },
+      { "id": "t3", "type": "transfer", "date": "2026-10-03", "amount": 1000000, "accountId": "bca", "toAccountId": "gopay", "groupId": "t3", "createdAt": "2026-10-03T01:00:00.000Z", "updatedAt": "2026-10-03T01:00:00.000Z" },
+      { "id": "t3-fee", "type": "expense", "date": "2026-10-03", "amount": 2500, "accountId": "bca", "categoryId": "cat-biaya", "groupId": "t3", "createdAt": "2026-10-03T01:00:00.000Z", "updatedAt": "2026-10-03T01:00:00.000Z" },
+      { "id": "t4", "type": "transfer", "date": "2026-10-10", "amount": 500000, "accountId": "bca", "toAccountId": "kartu", "billId": "b1", "billPeriod": "2026-10", "createdAt": "2026-10-10T01:00:00.000Z", "updatedAt": "2026-10-10T01:00:00.000Z" },
+      { "id": "t5", "type": "adjustment", "date": "2026-10-12", "amount": 7500, "accountId": "gopay", "adjustDirection": "decrease", "createdAt": "2026-10-12T01:00:00.000Z", "updatedAt": "2026-10-12T01:00:00.000Z" }
+    ],
+    "budgetLimits": [ { "id": "bl1", "categoryId": "cat-makan", "effectiveFrom": "2026-10", "amount": 1500000 } ],
+    "bills": [ { "id": "b1", "name": "Bayar Kartu BCA", "kind": "transfer", "amount": 500000, "isVariable": true, "dueDay": 10, "accountId": "bca", "toAccountId": "kartu", "startMonth": "2026-10", "active": true } ],
+    "billSkips": [],
+    "settings": [
+      { "key": "onboardingDone", "value": true },
+      { "key": "feeCategoryId", "value": "cat-biaya" },
+      { "key": "hideAmounts", "value": false }
+    ]
+  }
+}

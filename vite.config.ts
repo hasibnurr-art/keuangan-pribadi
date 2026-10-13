@@ -1,0 +1,47 @@
+import tailwindcss from '@tailwindcss/vite'
+import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite'
+import { VitePWA } from 'vite-plugin-pwa'
+import pkg from './package.json' with { type: 'json' }
+
+// base relatif + HashRouter: aplikasi bisa di-host di subpath GitHub Pages tanpa konfigurasi server.
+export default defineConfig({
+  base: './',
+  // Ukuran gzip ±160 KB, di bawah target PRD 300 KB; batas mentah dinaikkan agar peringatan relevan.
+  build: { chunkSizeWarningLimit: 700 },
+  define: { __APP_VERSION__: JSON.stringify(pkg.version) },
+  plugins: [
+    react(),
+    tailwindcss(),
+    VitePWA({
+      // "prompt": versi baru tidak memuat ulang otomatis saat pengguna sedang mengisi form (PRD §6.3).
+      registerType: 'prompt',
+      // Ikon sudah tercakup globPatterns; hindari entri precache ganda.
+      includeManifestIcons: false,
+      manifest: {
+        name: 'Keuangan Pribadi',
+        short_name: 'Keuangan',
+        description: 'Catat dan pahami keuangan pribadi. Data hanya tersimpan di perangkat Anda.',
+        lang: 'id',
+        start_url: './',
+        scope: './',
+        display: 'standalone',
+        orientation: 'portrait',
+        background_color: '#f8fafc',
+        theme_color: '#173b66',
+        icons: [
+          { src: 'pwa-64x64.png', sizes: '64x64', type: 'image/png' },
+          { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
+          { src: 'pwa-512x512.png', sizes: '512x512', type: 'image/png' },
+          { src: 'maskable-icon-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+        ],
+      },
+      workbox: {
+        // Precache seluruh aset: aplikasi berjalan 100% offline setelah kunjungan pertama.
+        globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
+        navigateFallback: 'index.html',
+        cleanupOutdatedCaches: true,
+      },
+    }),
+  ],
+})
