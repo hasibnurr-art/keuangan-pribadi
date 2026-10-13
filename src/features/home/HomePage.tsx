@@ -18,6 +18,7 @@ import { TransactionRow } from '../../ui/TransactionRow';
 import { BudgetMeter, BudgetStatusLabel } from '../../ui/charts';
 import { BillOccurrenceItem } from '../bills/BillOccurrenceItem';
 import { BackupBanner } from '../data/BackupBanner';
+import { GoalCard } from '../goals/GoalCard';
 import { ButtonLink, Card, EmptyState, Money, PageHeader, useAmountsHidden } from '../../ui/controls';
 
 export function HomePage() {
@@ -47,6 +48,7 @@ export function HomePage() {
         <AvailableCard />
         <ThisMonthCard month={toYearMonth(today)} />
         <BillsCard />
+        <GoalsCard />
         <BudgetCard month={toYearMonth(today)} />
         <AccountsCard />
 
@@ -223,6 +225,30 @@ function BillsCard() {
           )}
         </ul>
       )}
+    </section>
+  );
+}
+
+/** Maks. 2 target aktif dengan tenggat terdekat. Tidak tampil jika belum ada target. */
+function GoalsCard() {
+  const { goals } = useData();
+  const active = goals.filter((g) => !g.archived).sort((a, b) => a.targetMonth.localeCompare(b.targetMonth));
+  if (active.length === 0) return null;
+  return (
+    <section aria-labelledby="goals-card" className="rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <h2 className="flex items-center justify-between px-4 pt-4 text-sm font-semibold text-slate-600">
+        <span id="goals-card">Target tabungan</span>
+        <Link to="/target" className="font-normal text-brand-700">
+          Lihat semua ›
+        </Link>
+      </h2>
+      <ul className="divide-y divide-slate-100">
+        {active.slice(0, 2).map((goal) => (
+          <li key={goal.id}>
+            <GoalCard goal={goal} />
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }

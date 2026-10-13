@@ -108,6 +108,27 @@ export interface BillSkip {
   period: YearMonth;
 }
 
+export type GoalKind = 'custom' | 'emergency';
+
+/** Target tabungan. 1 target = 1 akun aset khusus; progres = saldo akun tersebut. */
+export interface Goal {
+  id: ID;
+  name: string;
+  icon: string;
+  kind: GoalKind;
+  targetAmount: Rupiah;
+  /** Target tercapai paling lambat akhir bulan ini. */
+  targetMonth: YearMonth;
+  accountId: ID;
+  /** Titik awal jadwal: tanggal dibuat dan saldo akun saat itu. */
+  startDate: LocalDate;
+  startAmount: Rupiah;
+  archived: boolean;
+  sortOrder: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface Setting {
   key: string;
   value: unknown;

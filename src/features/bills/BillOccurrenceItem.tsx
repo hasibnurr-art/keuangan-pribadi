@@ -23,7 +23,7 @@ export function payLink(o: BillOccurrence): string {
 
 /** Satu kejadian tagihan (bulan tertentu) dengan aksi Bayar / Lewati. */
 export function BillOccurrenceItem({ occurrence: o, compact }: { occurrence: BillOccurrence; compact?: boolean }) {
-  const { accountsById, categoriesById, today } = useData();
+  const { accountsById, categoriesById, goals, today } = useData();
   const toast = useToast();
   const category = o.bill.categoryId ? categoriesById.get(o.bill.categoryId) : undefined;
   const target = o.bill.toAccountId ? accountsById.get(o.bill.toAccountId) : undefined;
@@ -46,7 +46,7 @@ export function BillOccurrenceItem({ occurrence: o, compact }: { occurrence: Bil
   return (
     <div className="flex items-start gap-3 px-4 py-3">
       <CategoryBadge
-        icon={category?.icon ?? (target ? ACCOUNT_KIND_ICON[target.kind] : '🧾')}
+        icon={category?.icon ?? goals.find((g) => !g.archived && g.accountId === target?.id)?.icon ?? (target ? ACCOUNT_KIND_ICON[target.kind] : '🧾')}
         color={category?.color ?? 'slate'}
       />
       <div className="min-w-0 flex-1">

@@ -39,6 +39,7 @@ const LABEL: Record<(typeof BACKUP_TABLES)[number], string> = {
   bills: 'tagihan',
   billSkips: 'tagihan dilewati',
   settings: 'pengaturan',
+  goals: 'target',
 };
 
 function fail(table: (typeof BACKUP_TABLES)[number], index: number, problem: string): never {
@@ -70,6 +71,7 @@ function validateData(data: Rec): void {
   const billIds = ids('bills');
   ids('transactions');
   ids('budgetLimits');
+  ids('goals');
 
   rows('accounts').forEach((r, i) => {
     const a = r as Rec;
@@ -129,6 +131,21 @@ function validateData(data: Rec): void {
     const key = `${s.billId}|${s.period}`;
     check('billSkips', i, !skipKeys.has(key), 'ganda');
     skipKeys.add(key);
+  });
+
+  const goalAccounts = new Set<string>();
+  rows('goals').forEach((r, i) => {
+    const g = r as Rec;
+    check('goals', i, isStr(g.name) && typeof g.icon === 'string' && oneOf(['custom', 'emergency'])(g.kind), 'punya nama/jenis tidak valid');
+    check('goals', i, isInt(g.targetAmount, 1, MAX_AMOUNT) && isInt(g.startAmount, 0, Number.MAX_SAFE_INTEGER), 'punya nominal tidak valid');
+    check('goals', i, typeof g.targetMonth === 'string' && isValidYearMonth(g.targetMonth), 'punya bulan target tidak valid');
+    check('goals', i, typeof g.startDate === 'string' && isValidLocalDate(g.startDate), 'punya tanggal mulai tidak valid');
+    check('goals', i, accountIds.has(g.accountId as string), 'merujuk akun yang tidak ada');
+    check('goals', i, isBool(g.archived) && typeof g.sortOrder === 'number', 'punya data tidak lengkap');
+    if (!g.archived) {
+      check('goals', i, !goalAccounts.has(g.accountId as string), 'memakai akun yang sama dengan target aktif lain');
+      goalAccounts.add(g.accountId as string);
+    }
   });
 
   const settingKeys = new Set<string>();

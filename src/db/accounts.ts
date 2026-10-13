@@ -75,7 +75,7 @@ export async function setAccountArchived(
   archived: boolean,
   now: Date = new Date(),
 ): Promise<void> {
-  await db.transaction('rw', [db.accounts, db.transactions, db.bills, db.settings], async () => {
+  await db.transaction('rw', [db.accounts, db.transactions, db.bills, db.goals, db.settings], async () => {
     const { account, balance } = await balanceOf(db, accountId);
     if (archived) {
       const error = validateArchiveAccount(account, balance);
@@ -86,6 +86,8 @@ export async function setAccountArchived(
       if (bill) {
         throw new Error(`Akun masih dipakai tagihan aktif "${bill.name}". Nonaktifkan atau ubah tagihannya dulu.`);
       }
+      const goal = (await db.goals.where('accountId').equals(accountId).toArray()).find((g) => !g.archived);
+      if (goal) throw new Error(`Akun masih dipakai target "${goal.name}". Selesaikan atau arsipkan targetnya dulu.`);
     }
     await db.accounts.put({ ...account, archived, updatedAt: now.toISOString() });
     await touchData(db, now);
@@ -94,13 +96,16 @@ export async function setAccountArchived(
 
 /** Akun hanya bisa dihapus jika belum punya transaksi dan tidak dipakai tagihan. */
 export async function deleteAccount(db: KeuanganDB, accountId: ID, now: Date = new Date()): Promise<void> {
-  await db.transaction('rw', [db.accounts, db.transactions, db.bills, db.settings], async () => {
+  await db.transaction('rw', [db.accounts, db.transactions, db.bills, db.goals, db.settings], async () => {
     const transactions = await db.transactions.toArray();
     if (hasTransactions(accountId, transactions)) {
       throw new Error('Akun yang sudah punya transaksi tidak bisa dihapus. Arsipkan saja.');
     }
     const usedByBill = (await db.bills.toArray()).some((b) => b.accountId === accountId || b.toAccountId === accountId);
     if (usedByBill) throw new Error('Akun masih dipakai oleh tagihan. Ubah atau hapus tagihannya dulu.');
+    if ((await db.goals.where('accountId').equals(accountId).count()) > 0) {
+      throw new Error('Akun masih dipakai oleh target tabungan. Hapus targetnya dulu.');
+    }
     await db.accounts.delete(accountId);
     await touchData(db, now);
   });

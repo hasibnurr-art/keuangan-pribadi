@@ -1,6 +1,6 @@
 // Format file backup (PRD §9.12). File berisi SELURUH data perangkat.
 
-import type { Account, Bill, BillSkip, BudgetLimit, Category, Setting, Transaction } from '../domain/types';
+import type { Account, Bill, BillSkip, BudgetLimit, Category, Goal, Setting, Transaction } from '../domain/types';
 import { SCHEMA_VERSION, type KeuanganDB } from '../db/schema';
 
 export const BACKUP_APP_ID = 'keuangan-pribadi';
@@ -14,6 +14,7 @@ export interface BackupData {
   bills: Bill[];
   billSkips: BillSkip[];
   settings: Setting[];
+  goals: Goal[];
 }
 
 export type BackupCounts = { [K in keyof BackupData]: number };
@@ -35,6 +36,7 @@ export const BACKUP_TABLES = [
   'bills',
   'billSkips',
   'settings',
+  'goals',
 ] as const satisfies ReadonlyArray<keyof BackupData>;
 
 export function countsOf(data: BackupData): BackupCounts {
@@ -44,7 +46,7 @@ export function countsOf(data: BackupData): BackupCounts {
 /** Ambil seluruh data dalam satu transaksi baca agar snapshot konsisten. */
 export async function createBackup(db: KeuanganDB, now: Date = new Date()): Promise<BackupFile> {
   const data = await db.transaction('r', BACKUP_TABLES.map((t) => db[t]), async () => {
-    const [accounts, categories, transactions, budgetLimits, bills, billSkips, settings] = await Promise.all([
+    const [accounts, categories, transactions, budgetLimits, bills, billSkips, settings, goals] = await Promise.all([
       db.accounts.toArray(),
       db.categories.toArray(),
       db.transactions.toArray(),
@@ -52,8 +54,9 @@ export async function createBackup(db: KeuanganDB, now: Date = new Date()): Prom
       db.bills.toArray(),
       db.billSkips.toArray(),
       db.settings.toArray(),
+      db.goals.toArray(),
     ]);
-    return { accounts, categories, transactions, budgetLimits, bills, billSkips, settings };
+    return { accounts, categories, transactions, budgetLimits, bills, billSkips, settings, goals };
   });
   return {
     app: BACKUP_APP_ID,

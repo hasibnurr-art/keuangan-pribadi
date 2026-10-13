@@ -3,6 +3,7 @@ import { PageHeader } from '../../ui/controls';
 
 const LINKS = [
   { to: '/akun', icon: '💳', label: 'Akun', hint: 'Rekening, e-wallet, kartu kredit, pinjaman' },
+  { to: '/target', icon: '🎯', label: 'Target tabungan', hint: 'DP rumah, dana darurat, dan target lainnya' },
   { to: '/tagihan', icon: '🧾', label: 'Tagihan', hint: 'Tagihan rutin bulanan, cicilan, kartu kredit' },
   { to: '/anggaran', icon: '🎯', label: 'Anggaran', hint: 'Batas pengeluaran bulanan per kategori' },
   { to: '/kategori', icon: '🏷️', label: 'Kategori', hint: 'Ubah nama, ikon, urutan, atau arsipkan' },

@@ -21,6 +21,7 @@ export async function restoreBackup(db: KeuanganDB, backup: BackupFile, hooks: R
     await db.bills.bulkAdd(backup.data.bills);
     await db.billSkips.bulkAdd(backup.data.billSkips);
     await db.settings.bulkAdd(backup.data.settings);
+    await db.goals.bulkAdd(backup.data.goals);
 
     // Data sekarang identik dengan isi backup; aplikasi langsung siap dipakai.
     await db.settings.bulkPut([

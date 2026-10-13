@@ -9,8 +9,8 @@ type Migration = (backup: BackupFile) => BackupFile;
 
 /** Kunci = versi asal; fungsi mengubah backup versi itu menjadi versi+1. */
 export const MIGRATIONS: Record<number, Migration> = {
-  // Contoh untuk versi berikutnya:
-  // 1: (b) => ({ ...b, schemaVersion: 2, data: { ...b.data, goals: [] } }),
+  // v1 → v2: tabel target tabungan (goals) ditambahkan, awalnya kosong.
+  1: (b) => ({ ...b, schemaVersion: 2, data: { ...b.data, goals: [] } }),
 };
 
 export function migrateBackup(backup: BackupFile): BackupFile {

@@ -4,7 +4,7 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { createContext, use, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { computeBalances, computeTotals, type BalanceTotals } from '../domain/balance';
-import type { Account, Bill, BillSkip, BudgetLimit, Category, ID, LocalDate, Rupiah, Transaction } from '../domain/types';
+import type { Account, Bill, BillSkip, BudgetLimit, Category, Goal, ID, LocalDate, Rupiah, Transaction } from '../domain/types';
 import { db } from '../db';
 import { getAllSettings, type SettingValues } from '../db/settings';
 import { localDate } from '../lib/date';
@@ -16,6 +16,7 @@ export interface AppData {
   budgetLimits: BudgetLimit[];
   bills: Bill[];
   billSkips: BillSkip[];
+  goals: Goal[];
   settings: SettingValues;
   today: LocalDate;
   balances: Map<ID, Rupiah>;
@@ -53,14 +54,15 @@ export function DataProvider({ children, fallback }: { children: ReactNode; fall
   // misalnya akun sudah kosong tetapi transaksi belum.)
   const snapshot = useLiveQuery(
     () =>
-      db.transaction('r', [db.accounts, db.categories, db.transactions, db.budgetLimits, db.bills, db.billSkips, db.settings], async () => {
-        const [accounts, categories, transactions, budgetLimits, bills, billSkips, settings] = await Promise.all([
+      db.transaction('r', [db.accounts, db.categories, db.transactions, db.budgetLimits, db.bills, db.billSkips, db.goals, db.settings], async () => {
+        const [accounts, categories, transactions, budgetLimits, bills, billSkips, goals, settings] = await Promise.all([
           db.accounts.toArray(),
           db.categories.toArray(),
           db.transactions.toArray(),
           db.budgetLimits.toArray(),
           db.bills.toArray(),
           db.billSkips.toArray(),
+          db.goals.toArray(),
           getAllSettings(db),
         ]);
         return {
@@ -70,6 +72,7 @@ export function DataProvider({ children, fallback }: { children: ReactNode; fall
           budgetLimits,
           bills,
           billSkips,
+          goals: goals.sort(bySortOrder),
           settings,
         };
       }),

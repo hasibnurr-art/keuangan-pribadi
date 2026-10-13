@@ -97,7 +97,9 @@ function TransactionForm({ existing }: { existing: Existing | null }) {
     const last = settings.lastUsedAccountId ? accountsById.get(settings.lastUsedAccountId) : undefined;
     return last && !last.archived ? last.id : (accounts.find((a) => !a.archived)?.id ?? '');
   });
-  const [toAccountId, setToAccountId] = useState<ID>(main?.toAccountId ?? payingBill?.toAccountId ?? '');
+  const [toAccountId, setToAccountId] = useState<ID>(
+    main?.toAccountId ?? payingBill?.toAccountId ?? (accountsById.get(params.get('ke') ?? '')?.id || ''),
+  );
   const [categoryId, setCategoryId] = useState<ID>(main?.categoryId ?? payingBill?.categoryId ?? '');
   const alreadyPaid =
     !!bill && !!billRef && transactions.some((t) => t.billId === bill.id && t.billPeriod === billRef.period && t.id !== txId);

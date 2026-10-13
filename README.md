@@ -43,4 +43,5 @@ npm run build
 - [x] M3 — Insight (dashboard, anggaran, laporan + grafik SVG, sembunyikan nominal)
 - [x] M4 — Tagihan (tagihan rutin, Bayar/Lewati, kartu Beranda, Uang tersedia)
 - [x] M5 — Data & PWA (backup/restore JSON, CSV, pengingat, Pengaturan, offline, ikon, banner versi baru)
-- [ ] M6 — Rilis (✓ deploy GitHub Pages; sisa: uji di HP keluarga)
+- [x] M6 — Rilis (deploy GitHub Pages, Mode aman)
+- [x] v0.6 — Target tabungan (1 target = 1 akun; setoran rutin; Dana Darurat; simulasi). Skema v2.

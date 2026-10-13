@@ -26,14 +26,17 @@ export function BillFormPage() {
     if (existing) return { ...existing };
     // Dari saran di halaman akun utang: "Buat tagihan bulanan untuk akun ini".
     const target = params.get('ke') ? accountsById.get(params.get('ke')!) : undefined;
-    const payer = accounts.find((a) => a.group === 'asset' && !a.archived && a.id === settings.lastUsedAccountId)
-      ?? accounts.find((a) => a.group === 'asset' && !a.archived);
+    const isPayer = (a: (typeof accounts)[number]) => a.group === 'asset' && !a.archived && a.includeInAvailable && a.id !== target?.id;
+    const payer = accounts.find((a) => isPayer(a) && a.id === settings.lastUsedAccountId) ?? accounts.find(isPayer);
+    // Ke akun aset (tabungan target) = setoran; ke akun utang = bayar utang.
+    const saving = target?.group === 'asset';
+    const suggested = Number(params.get('nominal')) || 0;
     return {
       id: crypto.randomUUID(),
-      name: target ? `Bayar ${target.name}` : '',
+      name: target ? `${saving ? 'Nabung' : 'Bayar'} ${target.name}`.slice(0, 40) : '',
       kind: target ? 'transfer' : 'expense',
-      amount: 0,
-      isVariable: target ? target.kind !== 'loan' : false,
+      amount: Number.isInteger(suggested) && suggested > 0 ? suggested : 0,
+      isVariable: target ? !saving && target.kind !== 'loan' : false,
       dueDay: Number(today.slice(8, 10)),
       accountId: payer?.id ?? '',
       ...(target ? { toAccountId: target.id } : { categoryId: categories.find((c) => c.id === 'cat-tagihan' && !c.archived)?.id ?? '' }),

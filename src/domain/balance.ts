@@ -93,3 +93,15 @@ export function computeTotals(
   }
   return { totalCash, totalDebt, netWorth };
 }
+
+/** Perubahan saldo natural satu akun akibat satu transaksi (0 jika tidak terkait). */
+export function effectOnAccount(tx: Transaction, account: Account): Rupiah {
+  let delta = 0;
+  if (tx.accountId === account.id) {
+    if (tx.type === 'income') delta += naturalDelta(account, 'in', tx.amount);
+    else if (tx.type === 'expense' || tx.type === 'transfer') delta += naturalDelta(account, 'out', tx.amount);
+    else delta += tx.adjustDirection === 'decrease' ? -tx.amount : tx.amount;
+  }
+  if (tx.type === 'transfer' && tx.toAccountId === account.id) delta += naturalDelta(account, 'in', tx.amount);
+  return delta;
+}

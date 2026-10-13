@@ -1,7 +1,7 @@
 # Product Requirements Document (PRD)
 ## Aplikasi Keuangan Pribadi — Local-First PWA
 
-**Versi:** v2.0 — Siap dibangun
+**Versi:** v2.1 — MVP terpasang + Target tabungan
 **Tanggal:** 13 Oktober 2026
 **Pengguna:** Pemilik dan anggota keluarga, masing-masing dengan data sendiri yang terpisah
 **Bahasa / mata uang:** Bahasa Indonesia · IDR saja
@@ -27,6 +27,7 @@ Keputusan berikut diambil saat sesi review PRD dan menjadi dasar seluruh dokumen
 | K-9 | Scope MVP | Lihat §4 | Sesuaikan saldo, sembunyikan nominal, refund sederhana, dan laporan masuk MVP. Audit trail dihapus. |
 | K-10 | Stack | React + TypeScript + Vite + Dexie + Tailwind + vite-plugin-pwa + Recharts + Vitest; hosting GitHub Pages | Lihat §6. |
 | K-11 | Default detail | Semua default §15 disetujui; undo hapus diubah menjadi 8 detik | PRD final untuk MVP. |
+| K-12 | Target tabungan (14 Okt 2026) | 1 target = 1 akun aset khusus; setoran rutin ditawarkan sebagai tagihan; template Dana Darurat | Lihat §9.14. Skema naik ke versi 2 (tabel `goals`). Form cicilan ditunda. |
 
 ---
 
@@ -99,7 +100,6 @@ Pembeda utamanya: angka selalu akurat dan bisa dijelaskan, mencatat transaksi ce
 ## 4.2 Fase 2 (setelah MVP dipakai stabil ≥ 1 bulan)
 - Mode gelap
 - Kunci PIN aplikasi
-- Tujuan tabungan
 - Impor CSV dari bank
 - Backup otomatis ke Google Drive pribadi
 - Backup terenkripsi dengan kata sandi
@@ -271,6 +271,21 @@ interface Bill {
 }
 
 interface BillSkip { billId: ID; period: YearMonth; }
+
+interface Goal {                        // skema v2 (§9.14)
+  id: ID;
+  name: string;                         // wajib, ≤ 40 karakter
+  icon: string;
+  kind: 'custom' | 'emergency';
+  targetAmount: Rupiah;                 // ≥ 1
+  targetMonth: YearMonth;               // tercapai paling lambat akhir bulan ini
+  accountId: ID;                        // akun ASET khusus; 1 akun hanya untuk 1 target aktif
+  startDate: LocalDate;                 // titik awal jadwal
+  startAmount: Rupiah;                  // saldo akun saat target dibuat
+  archived: boolean;
+  sortOrder: number;
+  createdAt: string; updatedAt: string;
+}
 
 interface Setting { key: string; value: unknown; }
 // keys: onboardingDone, lastBackupAt, lastDataChangeAt, backupReminderDays (7),
@@ -512,6 +527,24 @@ Di header ada tombol 👁 untuk sembunyikan/tampilkan nominal (F-14), yang berla
 
 ---
 
+## 9.14 Target tabungan (v2.1)
+
+**Model:** 1 target = 1 akun aset khusus (rekening terpisah atau *kantong* bank digital). **Progres = saldo akun itu**, sehingga uang tidak terhitung dua kali dan menabung cukup dicatat sebagai Transfer. Akun target otomatis **tidak** dihitung di Uang tersedia.
+
+**Perhitungan** (`src/domain/goals.ts`), setoran dianggap terjadi sekali per bulan termasuk bulan berjalan:
+| Angka | Rumus |
+| --- | --- |
+| Terkumpul | max(0, saldo akun target); progres = terkumpul ÷ target (maks. 100%) |
+| Perlu per bulan | ⌈(target − terkumpul) ÷ sisa bulan⌉; sisa bulan = bulan ini s.d. bulan target; jika tenggat lewat → seluruh sisa |
+| Status jadwal | Garis lurus dari (tanggal mulai, saldo awal) ke (akhir bulan target, target). Tertinggal jika kurang > 1% target, Lebih cepat jika lebih > 5% target, selain itu Sesuai jadwal; juga *Tercapai* dan *Lewat tenggat* |
+| Rata-rata 3 bulan | Perubahan saldo bersih akun pada ≤ 3 bulan penuh terakhir sejak akun dibuka (setoran − penarikan ± penyesuaian nilai) |
+| Proyeksi / simulasi | Bulan tercapai = bulan ini + ⌈sisa ÷ setoran per bulan⌉ − 1 |
+| Saran Dana Darurat | Rata-rata pengeluaran 3 bulan penuh terakhir × 3/6/12 (default 6), dibulatkan ke atas ke Rp100.000 |
+
+**Fitur:** kartu target (progres, status jadwal dengan ikon + teks), detail (kekurangan, perlu/bulan, rata-rata, proyeksi), tonggak 25/50/75/100% dengan pesan netral, simulasi dua arah, setoran rutin opsional sebagai tagihan Transfer bulanan "Nabung …" (s.d. bulan target) yang otomatis mengurangi Uang tersedia, template Dana Darurat, kartu di Beranda (maks. 2 target, tenggat terdekat), arsip/selesai, hapus (akun & transaksi tetap ada).
+
+**Aturan:** pembuatan target (akun baru + target + tagihan setoran) atomik; akun yang dipakai target aktif tidak bisa diarsipkan/dihapus; akun target tidak bisa diganti setelah dibuat; backup v1 dimigrasikan otomatis (`goals: []`).
+
 # 10. UI/UX
 
 - Mobile-first, satu kolom, dan target sentuh ≥ 44px. Tombol [+] selalu terjangkau ibu jari.
@@ -569,6 +602,10 @@ Di header ada tombol 👁 untuk sembunyikan/tampilkan nominal (F-14), yang berla
 | QA-26 | *manual* — Mode pesawat setelah install | Aplikasi terbuka dan bisa menyimpan transaksi |
 | QA-27 | *manual* — Data 20.000 transaksi di HP kelas menengah | Dashboard < 1 detik |
 | QA-28 | *manual* — Install di iPhone & Android, backup via share sheet, restore di perangkat lain | Berhasil dan data identik |
+| QA-29 | Target 120 jt, terkumpul 30 jt, 12 bulan lagi | 25%; perlu Rp7.500.000/bulan; tonggak 25% |
+| QA-30 | Buat target + akun baru + setoran rutin; satu bagian gagal validasi | Tidak ada yang tersimpan |
+| QA-31 | Setoran rutin Rp X bulan ini dari BCA | Uang tersedia berkurang Rp X; akun target tidak masuk total kas |
+| QA-32 | Pulihkan backup skema v1 | Berhasil; target kosong; data lain identik |
 
 ---
 

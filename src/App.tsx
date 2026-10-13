@@ -10,6 +10,9 @@ import { BillsPage } from './features/bills/BillsPage';
 import { BudgetsPage } from './features/budgets/BudgetsPage';
 import { CategoriesPage } from './features/categories/CategoriesPage';
 import { DataPage } from './features/data/DataPage';
+import { GoalDetailPage } from './features/goals/GoalDetailPage';
+import { GoalFormPage } from './features/goals/GoalFormPage';
+import { GoalsPage } from './features/goals/GoalsPage';
 import { HomePage } from './features/home/HomePage';
 import { MorePage } from './features/more/MorePage';
 import { OnboardingPage } from './features/onboarding/OnboardingPage';
@@ -79,6 +82,10 @@ const router = createHashRouter([
       { path: 'akun/:id/ubah', element: <AccountFormPage /> },
       { path: 'kategori', element: <CategoriesPage /> },
       { path: 'anggaran', element: <BudgetsPage /> },
+      { path: 'target', element: <GoalsPage /> },
+      { path: 'target/baru', element: <GoalFormPage /> },
+      { path: 'target/:id', element: <GoalDetailPage /> },
+      { path: 'target/:id/ubah', element: <GoalFormPage /> },
       { path: 'tagihan', element: <BillsPage /> },
       { path: 'tagihan/baru', element: <BillFormPage /> },
       { path: 'tagihan/:id', element: <BillFormPage /> },

@@ -9,7 +9,7 @@ const NAV = [
 ];
 
 /** Form layar penuh tidak menampilkan navigasi bawah agar fokus. */
-const FULLSCREEN = /^\/(transaksi\/.+|tagihan\/.+|akun\/(baru|[^/]+\/ubah))$/;
+const FULLSCREEN = /^\/(transaksi\/.+|tagihan\/.+|akun\/(baru|[^/]+\/ubah)|target\/(baru|[^/]+\/ubah))$/;
 
 export function Shell() {
   const { pathname } = useLocation();

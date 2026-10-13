@@ -129,7 +129,11 @@ describe('Backup & restore', () => {
 
   it('migrasi dijalankan berurutan dari versi lama', () => {
     const v1 = JSON.parse(fixtureText) as BackupFile;
-    expect(migrateBackup(v1)).toBe(v1); // sudah versi terbaru
+    // v1 → v2: tabel target ditambahkan kosong, data lain tidak berubah.
+    const v2 = migrateBackup(v1);
+    expect(v2.schemaVersion).toBe(2);
+    expect(v2.data.goals).toEqual([]);
+    expect(v2.data.transactions).toEqual(v1.data.transactions);
     MIGRATIONS[0] = (b) => ({ ...b, schemaVersion: 1, exportedAt: 'dimigrasi' });
     try {
       expect(migrateBackup({ ...v1, schemaVersion: 0 }).exportedAt).toBe('dimigrasi');
