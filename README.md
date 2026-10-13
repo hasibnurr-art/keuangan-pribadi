@@ -2,6 +2,10 @@
 
 PWA pencatat keuangan pribadi yang berjalan sepenuhnya di perangkat (tanpa server). Spesifikasi lengkap: [docs/PRD.md](docs/PRD.md).
 
+**Aplikasi:** https://hasibnurr-art.github.io/keuangan-pribadi/
+
+Setiap push ke `main` otomatis menjalankan typecheck + tes lalu memasang ke GitHub Pages (`.github/workflows/deploy.yml`). Jika tes gagal, versi lama tetap online. **Jangan ganti nama repository atau alamat situs:** data di perangkat pengguna terikat pada alamat ini.
+
 ## Perintah
 
 ```bash
@@ -39,4 +43,4 @@ npm run build
 - [x] M3 — Insight (dashboard, anggaran, laporan + grafik SVG, sembunyikan nominal)
 - [x] M4 — Tagihan (tagihan rutin, Bayar/Lewati, kartu Beranda, Uang tersedia)
 - [x] M5 — Data & PWA (backup/restore JSON, CSV, pengingat, Pengaturan, offline, ikon, banner versi baru)
-- [ ] M6 — Rilis
+- [ ] M6 — Rilis (✓ deploy GitHub Pages; sisa: uji di HP keluarga)
