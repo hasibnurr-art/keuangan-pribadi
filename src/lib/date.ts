@@ -75,7 +75,15 @@ export function diffDays(a: LocalDate, b: LocalDate): number {
 
 /** Daftar bulan dari `from` sampai `to` (inklusif). */
 export function monthsBetween(from: YearMonth, to: YearMonth): YearMonth[] {
+  if (!isValidYearMonth(from) || !isValidYearMonth(to) || from > to) return [];
+  // Pengaman: rentang dibatasi MAX_MONTH_SPAN bulan terakhir agar data aneh tidak membekukan aplikasi.
+  const earliest = addMonths(to, -(MAX_MONTH_SPAN - 1));
   const out: YearMonth[] = [];
-  for (let ym = from; ym <= to; ym = addMonths(ym, 1)) out.push(ym);
+  for (let ym = from < earliest ? earliest : from; ym <= to && out.length < MAX_MONTH_SPAN; ym = addMonths(ym, 1)) {
+    out.push(ym);
+  }
   return out;
 }
+
+/** Tidak ada rentang bulan yang wajar melebihi 100 tahun. */
+export const MAX_MONTH_SPAN = 1200;

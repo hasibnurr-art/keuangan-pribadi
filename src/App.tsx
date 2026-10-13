@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Navigate, RouterProvider, createHashRouter } from 'react-router';
 import { DataProvider, useSettings } from './app/data';
 import { Shell } from './app/Shell';
@@ -17,12 +18,35 @@ import { SettingsPage } from './features/settings/SettingsPage';
 import { TransactionFormPage } from './features/transactions/TransactionFormPage';
 import { TransactionsPage } from './features/transactions/TransactionsPage';
 import { UpdateBanner } from './app/UpdateBanner';
+import { RouteError } from './safe/RouteError';
+import { SAFE_MODE_URL } from './safe/diagnostics';
 import { ToastProvider } from './ui/toast';
 
+/** Layar memuat. Jika lebih dari 8 detik, tawarkan muat ulang dan Mode aman. */
 function Splash() {
+  const [slow, setSlow] = useState(false);
+  useEffect(() => {
+    const timer = window.setTimeout(() => setSlow(true), 8_000);
+    return () => window.clearTimeout(timer);
+  }, []);
   return (
-    <div className="flex min-h-dvh items-center justify-center text-slate-500" role="status">
-      Memuat…
+    <div className="flex min-h-dvh flex-col items-center justify-center gap-4 px-6 text-center text-slate-500" role="status">
+      <p>Memuat…</p>
+      {slow && (
+        <div className="flex max-w-xs flex-col gap-2 text-sm">
+          <p className="text-slate-700">Aplikasi belum merespons. Data Anda tetap tersimpan.</p>
+          <button
+            type="button"
+            onClick={() => window.location.reload()}
+            className="min-h-11 rounded-xl bg-brand-700 font-semibold text-white"
+          >
+            Muat ulang
+          </button>
+          <a href={SAFE_MODE_URL} className="min-h-11 rounded-xl border border-slate-300 bg-white py-3 font-semibold text-slate-800">
+            Buka Mode aman
+          </a>
+        </div>
+      )}
     </div>
   );
 }
@@ -43,6 +67,7 @@ const router = createHashRouter([
   {
     path: '/',
     element: <Root />,
+    errorElement: <RouteError />,
     children: [
       { index: true, element: <HomePage /> },
       { path: 'transaksi', element: <TransactionsPage /> },

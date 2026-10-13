@@ -64,3 +64,18 @@ describe('Format', () => {
     expect(isValidAmount(10.5)).toBe(false);
   });
 });
+
+describe('Pengaman rentang bulan', () => {
+  it('rentang tidak valid atau terbalik menghasilkan daftar kosong', () => {
+    expect(monthsBetween('2026-13', '2027-01')).toEqual([]);
+    expect(monthsBetween('', '2027-01')).toEqual([]);
+    expect(monthsBetween('2027-01', '2026-01')).toEqual([]);
+  });
+
+  it('rentang sangat panjang dibatasi 1200 bulan terakhir', () => {
+    const months = monthsBetween('0001-01', '2026-10');
+    expect(months).toHaveLength(1200);
+    expect(months.at(-1)).toBe('2026-10');
+    expect(months[0]).toBe('1926-11');
+  });
+});
