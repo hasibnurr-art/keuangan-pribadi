@@ -62,7 +62,8 @@ describe('Cicilan', () => {
 
     await user.click((await screen.findAllByRole('link', { name: 'Beranda' }))[0]);
     expect(await screen.findByRole('button', { name: /Uang tersedia/ }, { timeout: 3000 })).toBeTruthy();
-    expect(within(screen.getByRole('region', { name: 'Tagihan' })).getByText('Bayar Cicilan Motor')).toBeTruthy();
+    // Data reaktif bisa tiba sesaat setelah halaman tampil (terutama di CI yang lambat): tunggu.
+    expect(await within(screen.getByRole('region', { name: 'Tagihan' })).findByText('Bayar Cicilan Motor', undefined, { timeout: 3000 })).toBeTruthy();
 
     await user.click(screen.getAllByRole('link', { name: 'Laporan' })[0]);
     expect(await screen.findByRole('heading', { name: 'Laporan' })).toBeTruthy();
