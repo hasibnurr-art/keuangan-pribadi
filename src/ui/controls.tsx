@@ -13,16 +13,17 @@ import { Link, useNavigate } from 'react-router';
 import { useOptionalData } from '../app/data';
 import type { Rupiah } from '../domain/types';
 import { formatRupiah } from '../lib/money';
+import { CaretLeft, ICON, type Icon } from './icons';
 
 export const cx = (...classes: Array<string | false | null | undefined>) => classes.filter(Boolean).join(' ');
 
 type Variant = 'primary' | 'secondary' | 'danger' | 'ghost';
 
 const VARIANTS: Record<Variant, string> = {
-  primary: 'bg-brand-700 text-white hover:bg-brand-800 disabled:bg-slate-300',
-  secondary: 'border border-slate-300 bg-white text-slate-800 hover:bg-slate-50 disabled:text-slate-400',
-  danger: 'border border-red-200 bg-white text-red-700 hover:bg-red-50 disabled:text-slate-400',
-  ghost: 'text-brand-700 hover:bg-brand-50 disabled:text-slate-400',
+  primary: 'bg-brand-700 text-white hover:bg-brand-800 active:bg-brand-900 disabled:bg-slate-300',
+  secondary: 'border border-slate-300 bg-white text-slate-800 pressable disabled:text-slate-400',
+  danger: 'border border-red-200 bg-white text-red-700 hover:bg-red-50 active:bg-red-100 disabled:text-slate-400',
+  ghost: 'text-brand-700 hover:bg-brand-50 active:bg-brand-100 disabled:text-slate-400',
 };
 
 export function Button({
@@ -154,10 +155,10 @@ export function PageHeader({
         <button
           type="button"
           aria-label="Kembali"
-          className="flex size-11 items-center justify-center rounded-full text-xl text-slate-700 hover:bg-slate-200"
+          className="flex size-11 items-center justify-center rounded-full text-xl text-slate-700 hover:bg-slate-200 active:bg-slate-300"
           onClick={() => (typeof back === 'string' ? navigate(back) : goBack(navigate))}
         >
-          ←
+          <CaretLeft size={ICON.lg} />
         </button>
       )}
       <h1 className={cx('flex-1 truncate text-lg font-semibold', !back && 'pl-2 lg:pl-0')}>{title}</h1>
@@ -172,11 +173,11 @@ export function goBack(navigate: ReturnType<typeof useNavigate>, fallback = '/')
   else navigate(fallback, { replace: true });
 }
 
-export function EmptyState({ icon, title, children }: { icon: string; title: string; children?: ReactNode }) {
+export function EmptyState({ icon: IconCmp, title, children }: { icon: Icon; title: string; children?: ReactNode }) {
   return (
     <div className="flex flex-col items-center gap-2 px-6 py-12 text-center">
-      <span className="text-4xl" aria-hidden>
-        {icon}
+      <span className="mb-1 flex size-14 items-center justify-center rounded-full bg-slate-100 text-slate-500">
+        <IconCmp size={ICON.xl} />
       </span>
       <p className="font-semibold text-slate-800">{title}</p>
       {children && <div className="text-sm text-slate-600">{children}</div>}
@@ -222,7 +223,7 @@ export function Segmented<T extends string>({
           disabled={disabled && value !== option.value}
           onClick={() => onChange(option.value)}
           className={cx(
-            'min-h-10 flex-1 rounded-lg px-2 text-sm font-semibold transition-colors',
+            'min-h-11 flex-1 rounded-lg px-2 text-sm font-semibold transition-colors',
             value === option.value ? 'bg-white text-brand-800 shadow-sm' : 'text-slate-600 disabled:text-slate-400',
           )}
         >

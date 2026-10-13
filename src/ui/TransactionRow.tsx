@@ -2,6 +2,7 @@ import { Link } from 'react-router';
 import { useData } from '../app/data';
 import type { Transaction } from '../domain/types';
 import { CategoryBadge } from './CategoryBadge';
+import { ArrowsLeftRight, Scales, type Icon } from './icons';
 import { Money, cx } from './controls';
 
 /** Baris transaksi. Biaya transfer membuka transfer induknya. */
@@ -13,21 +14,21 @@ export function TransactionRow({ tx }: { tx: Transaction }) {
 
   let title: string;
   let subtitle = account?.name ?? '?';
-  let icon = category?.icon ?? '📦';
+  let icon: string | Icon = category?.icon ?? '📦';
   let color = category?.color ?? 'slate';
   let amount;
 
   switch (tx.type) {
     case 'transfer':
       title = 'Transfer';
-      icon = '⇄';
+      icon = ArrowsLeftRight;
       color = 'slate';
       subtitle = `${account?.name ?? '?'} → ${tx.toAccountId ? accountsById.get(tx.toAccountId)?.name ?? '?' : '?'}`;
       amount = <Money value={tx.amount} className="text-slate-500" />;
       break;
     case 'adjustment':
       title = 'Penyesuaian saldo';
-      icon = '⚖️';
+      icon = Scales;
       color = 'slate';
       amount = (
         <Money value={tx.amount} prefix={tx.adjustDirection === 'decrease' ? '−' : '+'} className="text-slate-500" />
@@ -45,7 +46,7 @@ export function TransactionRow({ tx }: { tx: Transaction }) {
   return (
     <Link
       to={`/transaksi/${target}`}
-      className="flex min-h-16 items-center gap-3 px-4 py-2 hover:bg-slate-50 focus-visible:bg-slate-50"
+      className="flex min-h-16 items-center gap-3 px-4 py-2 pressable focus-visible:bg-slate-50"
     >
       <CategoryBadge icon={icon} color={color} />
       <div className="min-w-0 flex-1">

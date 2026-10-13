@@ -5,14 +5,15 @@ import type { Goal } from '../../domain/types';
 import { formatMonth } from '../../lib/format';
 import { formatPercent } from '../../lib/money';
 import { Money, cx } from '../../ui/controls';
+import { Check, ICON, TrendUp, Warning } from '../../ui/icons';
 
 // Palet status (sama dengan anggaran): selalu disertai ikon + teks.
 const STATUS = {
-  done: { icon: '✓', bg: '#0ca30c', ink: '#ffffff', fill: '#0ca30c' },
-  ahead: { icon: '▲', bg: '#0ca30c', ink: '#ffffff', fill: '#2a78d6' },
-  on_track: { icon: '✓', bg: '#0ca30c', ink: '#ffffff', fill: '#2a78d6' },
-  behind: { icon: '!', bg: '#fab219', ink: '#0f172a', fill: '#2a78d6' },
-  overdue: { icon: '!', bg: '#d03b3b', ink: '#ffffff', fill: '#2a78d6' },
+  done: { icon: Check, bg: 'var(--color-good)', ink: '#ffffff', fill: 'var(--color-good)' },
+  ahead: { icon: TrendUp, bg: 'var(--color-good)', ink: '#ffffff', fill: 'var(--color-series-income)' },
+  on_track: { icon: Check, bg: 'var(--color-good)', ink: '#ffffff', fill: 'var(--color-series-income)' },
+  behind: { icon: Warning, bg: 'var(--color-warn)', ink: '#0f172a', fill: 'var(--color-series-income)' },
+  overdue: { icon: Warning, bg: 'var(--color-bad)', ink: '#ffffff', fill: 'var(--color-series-income)' },
 } as const;
 
 export function ScheduleLabel({ schedule, className }: { schedule: Schedule; className?: string }) {
@@ -24,7 +25,7 @@ export function ScheduleLabel({ schedule, className }: { schedule: Schedule; cla
         className="flex size-4 shrink-0 items-center justify-center rounded-full text-[10px] font-bold"
         style={{ background: style.bg, color: style.ink }}
       >
-        {style.icon}
+        <style.icon size={ICON.xs} weight="bold" />
       </span>
       {schedule.status === 'done' && 'Target tercapai'}
       {schedule.status === 'on_track' && 'Sesuai jadwal'}
@@ -51,7 +52,7 @@ export function GoalProgressBar({ ratio, status }: { ratio: number; status: Sche
       aria-valuemax={100}
       aria-valuenow={Math.round(ratio * 100)}
       aria-valuetext={`${formatPercent(ratio)} terkumpul`}
-      className="h-2.5 overflow-hidden rounded-full bg-[#dbe7f5]"
+      className="h-2.5 overflow-hidden rounded-full bg-progress-track"
     >
       <div className="h-2.5 rounded-full" style={{ width: `${ratio * 100}%`, background: STATUS[status].fill }} />
     </div>
@@ -65,7 +66,7 @@ export function GoalCard({ goal }: { goal: Goal }) {
   const schedule = goalSchedule(goal, progress.saved, today);
 
   return (
-    <Link to={`/target/${goal.id}`} className="block px-4 py-3 hover:bg-slate-50">
+    <Link to={`/target/${goal.id}`} className="block px-4 py-3 pressable">
       <div className="flex items-center gap-3">
         <span aria-hidden className="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-50 text-xl">
           {goal.icon}

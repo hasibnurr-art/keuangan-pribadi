@@ -1,4 +1,5 @@
 import { cx } from './controls';
+import { ICON, type Icon } from './icons';
 
 // Kelas lengkap ditulis eksplisit agar terdeteksi Tailwind.
 export const COLOR_CLASSES: Record<string, string> = {
@@ -35,7 +36,9 @@ export const SWATCH_CLASSES: Record<string, string> = {
   rose: 'bg-rose-400',
 };
 
-export function CategoryBadge({ icon, color, size = 'md' }: { icon: string; color: string; size?: 'sm' | 'md' }) {
+/** `icon` berupa emoji (konten pilihan pengguna) atau komponen ikon sistem. */
+export function CategoryBadge({ icon, color, size = 'md' }: { icon: string | Icon; color: string; size?: 'sm' | 'md' }) {
+  const IconCmp = typeof icon === 'string' ? null : icon;
   return (
     <span
       aria-hidden
@@ -45,7 +48,7 @@ export function CategoryBadge({ icon, color, size = 'md' }: { icon: string; colo
         COLOR_CLASSES[color] ?? COLOR_CLASSES.slate,
       )}
     >
-      {icon}
+      {IconCmp ? <IconCmp size={size === 'md' ? ICON.md : ICON.sm} className="text-slate-700" /> : (icon as string)}
     </span>
   );
 }

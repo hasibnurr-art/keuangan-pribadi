@@ -44,7 +44,7 @@ export function AmountInput({ value, onChange, size = 'normal', withThousands, c
       {withThousands && (
         <button
           type="button"
-          className="min-h-10 rounded-lg bg-slate-100 px-3 text-sm font-semibold text-slate-700 hover:bg-slate-200"
+          className="min-h-11 rounded-lg bg-slate-100 px-3 text-sm font-semibold text-slate-700 hover:bg-slate-200 active:bg-slate-300"
           onClick={() => {
             onChange(parseAmountInput(`${value ?? ''}000`));
             ref.current?.focus();

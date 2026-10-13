@@ -7,6 +7,7 @@ import { canPromptInstall, isIOS, isStandalone, onInstallAvailable, promptInstal
 import { Alert, Button } from '../../ui/controls';
 import { AccountFields, newAccountDraft } from '../accounts/AccountFields';
 import { RestorePanel } from '../data/RestorePanel';
+import { ICON, Wallet } from '../../ui/icons';
 
 type Step = 'welcome' | 'account' | 'install';
 
@@ -43,8 +44,8 @@ export function OnboardingPage() {
       {step === 'welcome' && (
         <div className="flex flex-1 flex-col gap-6">
           <div className="flex flex-1 flex-col justify-center gap-4">
-            <span className="text-5xl" aria-hidden>
-              💰
+            <span className="flex size-16 items-center justify-center rounded-2xl bg-brand-800 text-white">
+              <Wallet size={ICON.xl} />
             </span>
             <h1 className="text-2xl font-bold text-brand-900">Selamat datang di Keuangan Pribadi</h1>
             <p className="text-slate-600">

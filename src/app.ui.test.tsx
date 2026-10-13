@@ -78,7 +78,7 @@ describe('Alur utama aplikasi', () => {
   it('menambah akun GoPay lalu transfer dengan biaya admin', async () => {
     await user.click((await screen.findAllByRole('link', { name: 'Lainnya' }))[0]);
     await user.click(await screen.findByRole('link', { name: /^Akun/ }));
-    await user.click(await screen.findByRole('link', { name: '+ Tambah' }));
+    await user.click(await screen.findByRole('link', { name: 'Tambah' }));
     await user.selectOptions(await screen.findByLabelText('Jenis'), 'ewallet');
     await user.type(screen.getByLabelText('Nama akun'), 'GoPay');
     await user.click(screen.getByRole('button', { name: 'Simpan akun' }));

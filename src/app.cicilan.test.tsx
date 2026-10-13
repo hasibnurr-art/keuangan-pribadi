@@ -46,7 +46,7 @@ describe('Cicilan', () => {
     render(<App />);
     await user.click((await screen.findAllByRole('link', { name: 'Lainnya' }))[0]);
     await user.click(await screen.findByRole('link', { name: /^Akun/ }));
-    await user.click(await screen.findByRole('link', { name: '+ Tambah' }));
+    await user.click(await screen.findByRole('link', { name: 'Tambah' }));
     await user.click(await screen.findByRole('radio', { name: 'Utang' }));
     await user.selectOptions(screen.getByLabelText('Jenis'), 'loan');
     await user.type(screen.getByLabelText('Nama akun'), 'Cicilan Motor');

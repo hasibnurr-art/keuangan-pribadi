@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import { useData } from '../../app/data';
 import { planAdjustment } from '../../domain/adjustment';
-import { ACCOUNT_KIND_ICON, ACCOUNT_KIND_LABEL } from '../../domain/defaults';
+import { ACCOUNT_KIND_LABEL } from '../../domain/defaults';
 import { hasTransactions } from '../../domain/entityRules';
 import { sortNewestFirst } from '../../domain/history';
 import type { Account, Rupiah } from '../../domain/types';
@@ -15,6 +15,7 @@ import { ConfirmDialog, Dialog } from '../../ui/Dialog';
 import { TransactionRow } from '../../ui/TransactionRow';
 import { Alert, Button, ButtonLink, Card, EmptyState, Field, Money, PageHeader } from '../../ui/controls';
 import { useToast } from '../../ui/toast';
+import { AccountKindBadge, Receipt } from '../../ui/icons';
 
 const RECENT_LIMIT = 30;
 
@@ -75,9 +76,7 @@ export function AccountDetailPage() {
       <div className="flex flex-col gap-4 p-4">
         <Card>
           <div className="flex items-center gap-3">
-            <span aria-hidden className="flex size-12 items-center justify-center rounded-full bg-slate-100 text-2xl">
-              {ACCOUNT_KIND_ICON[account.kind]}
-            </span>
+            <AccountKindBadge kind={account.kind} size="lg" />
             <div>
               <p className="text-sm text-slate-500">
                 {ACCOUNT_KIND_LABEL[account.kind]}
@@ -118,14 +117,14 @@ export function AccountDetailPage() {
           <h2 id="account-tx" className="mb-2 flex items-center justify-between px-1 text-sm font-semibold text-slate-600">
             <span>Transaksi</span>
             {related.length > RECENT_LIMIT && (
-              <ButtonLink to={`/transaksi?akun=${account.id}`} variant="ghost" className="min-h-9">
+              <ButtonLink to={`/transaksi?akun=${account.id}`} variant="ghost" className="min-h-11">
                 Lihat semua ({related.length})
               </ButtonLink>
             )}
           </h2>
           {related.length === 0 ? (
             <Card>
-              <EmptyState icon="📝" title="Belum ada transaksi di akun ini" />
+              <EmptyState icon={Receipt} title="Belum ada transaksi di akun ini" />
             </Card>
           ) : (
             <ul className="divide-y divide-slate-100 overflow-hidden rounded-2xl border border-slate-200 bg-white">

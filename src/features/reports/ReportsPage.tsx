@@ -10,6 +10,7 @@ import { formatPercent } from '../../lib/money';
 import { MonthNav } from '../../ui/MonthNav';
 import { CategoryBars, TrendChart } from '../../ui/charts';
 import { Card, EmptyState, Money, PageHeader, useAmountsHidden } from '../../ui/controls';
+import { CaretDown, CaretUp, ChartBar, ICON } from '../../ui/icons';
 
 export function ReportsPage() {
   const { transactions, categoriesById, today } = useData();
@@ -43,7 +44,7 @@ export function ReportsPage() {
 
         {transactions.length === 0 ? (
           <Card>
-            <EmptyState icon="📊" title="Belum ada data untuk dilaporkan">
+            <EmptyState icon={ChartBar} title="Belum ada data untuk dilaporkan">
               Laporan muncul setelah Anda mencatat transaksi.
             </EmptyState>
           </Card>
@@ -109,7 +110,6 @@ function SummaryTile({
   to?: string;
 }) {
   const hidden = useAmountsHidden();
-  const arrow = change.delta > 0 ? '▲' : change.delta < 0 ? '▼' : '';
   const body = (
     <>
       <p className="text-sm text-slate-500">{label}</p>
@@ -119,7 +119,7 @@ function SummaryTile({
           `Sama dengan ${previousLabel}`
         ) : (
           <>
-            <span aria-hidden>{arrow} </span>
+            {change.delta > 0 ? <CaretUp size={ICON.xs} weight="bold" className="inline align-baseline" /> : <CaretDown size={ICON.xs} weight="bold" className="inline align-baseline" />}{' '}
             <span className="sr-only">{change.delta > 0 ? 'Naik' : 'Turun'} </span>
             <Money value={Math.abs(change.delta)} />
             {!hidden && change.ratio !== null && ` (${formatPercent(Math.abs(change.ratio))})`} dari {previousLabel}

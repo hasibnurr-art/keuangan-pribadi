@@ -1,3 +1,4 @@
+import { IconContext } from '@phosphor-icons/react/dist/lib/context';
 import { useEffect, useState } from 'react';
 import { Navigate, RouterProvider, createHashRouter } from 'react-router';
 import { DataProvider, useSettings } from './app/data';
@@ -98,11 +99,16 @@ const router = createHashRouter([
   },
 ]);
 
+const ICON_DEFAULTS = { size: 20, weight: 'regular' as const, 'aria-hidden': true, focusable: 'false' as const };
+
 export default function App() {
   return (
-    <ToastProvider>
-      <UpdateBanner />
-      <RouterProvider router={router} />
-    </ToastProvider>
+    // Ikon dekoratif secara default: teks/label di sebelahnya yang memberi makna.
+    <IconContext value={ICON_DEFAULTS}>
+      <ToastProvider>
+        <UpdateBanner />
+        <RouterProvider router={router} />
+      </ToastProvider>
+    </IconContext>
   );
 }

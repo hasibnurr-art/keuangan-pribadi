@@ -60,6 +60,13 @@ describe('Insight (M3)', () => {
     expect(within(budget).getByText('Makan & Minum')).toBeTruthy();
     expect(within(budget).getByText(/Hampir habis/)).toBeTruthy();
     expect(within(budget).getByRole('meter').getAttribute('aria-valuenow')).toBe('90');
+
+    // Ikon sistem bersifat dekoratif (aria-hidden); hanya grafik berlabel yang boleh terbaca.
+    const exposed = [...document.querySelectorAll('svg')].filter(
+      (svg) => svg.getAttribute('aria-hidden') !== 'true' && svg.getAttribute('role') !== 'img',
+    );
+    expect(exposed).toHaveLength(0);
+    expect(document.querySelectorAll('svg[aria-hidden="true"]').length).toBeGreaterThan(5);
   });
 
   it('rincian Uang tersedia menjelaskan asal angka', async () => {
@@ -100,7 +107,7 @@ describe('Insight (M3)', () => {
   it('anggaran: menambah batas kategori baru lewat dialog', async () => {
     await user.click(screen.getAllByRole('link', { name: 'Lainnya' })[0]);
     await user.click(await screen.findByRole('link', { name: /^Anggaran/ }));
-    await user.click(await screen.findByRole('button', { name: '+ Atur' }));
+    await user.click(await screen.findByRole('button', { name: 'Atur' }));
 
     const dialog = await screen.findByRole('dialog', { name: 'Atur anggaran' });
     await user.selectOptions(within(dialog).getByLabelText('Kategori'), 'cat-transportasi');

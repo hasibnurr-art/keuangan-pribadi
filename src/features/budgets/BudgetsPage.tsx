@@ -16,6 +16,7 @@ import { MonthNav } from '../../ui/MonthNav';
 import { BudgetMeter, BudgetStatusLabel } from '../../ui/charts';
 import { Alert, Button, Card, EmptyState, Field, Money, PageHeader, Select } from '../../ui/controls';
 import { useToast } from '../../ui/toast';
+import { ChartPieSlice, ICON, PencilSimple, Plus } from '../../ui/icons';
 
 interface Editing {
   categoryId: ID | null;
@@ -49,7 +50,7 @@ export function BudgetsPage() {
           editable &&
           available.length > 0 && (
             <Button variant="ghost" onClick={() => setEditing({ categoryId: null, amount: null })}>
-              + Atur
+              <Plus size={ICON.sm} weight="bold" /> Atur
             </Button>
           )
         }
@@ -60,7 +61,7 @@ export function BudgetsPage() {
 
         {rows.length === 0 ? (
           <Card>
-            <EmptyState icon="🎯" title={editable ? 'Belum ada anggaran' : 'Tidak ada anggaran di bulan ini'}>
+            <EmptyState icon={ChartPieSlice} title={editable ? 'Belum ada anggaran' : 'Tidak ada anggaran di bulan ini'}>
               {editable && (
                 <>
                   <p className="mb-4">Tetapkan batas bulanan per kategori. Batas berlaku setiap bulan sampai Anda mengubahnya.</p>
@@ -72,7 +73,7 @@ export function BudgetsPage() {
         ) : (
           <>
             <Card>
-              <dl className="grid grid-cols-3 gap-2 text-sm">
+              <dl className="grid grid-cols-[repeat(auto-fit,minmax(7.5rem,1fr))] gap-x-3 gap-y-2 text-sm">
                 <div>
                   <dt className="text-slate-500">Total batas</dt>
                   <dd className="font-semibold">
@@ -99,7 +100,7 @@ export function BudgetsPage() {
                 <li key={category.id} className="flex items-start gap-1 pr-1">
                   <Link
                     to={`/transaksi?bulan=${month}&kategori=${category.id}`}
-                    className="flex min-w-0 flex-1 items-start gap-3 px-4 py-3 hover:bg-slate-50"
+                    className="flex min-w-0 flex-1 items-start gap-3 px-4 py-3 pressable"
                   >
                     <CategoryBadge icon={category.icon} color={category.color} />
                     <div className="min-w-0 flex-1">
@@ -117,10 +118,10 @@ export function BudgetsPage() {
                     <button
                       type="button"
                       aria-label={`Ubah anggaran ${category.name}`}
-                      className="mt-2 flex size-11 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100"
+                      className="mt-2 flex size-11 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 active:bg-slate-200"
                       onClick={() => setEditing({ categoryId: category.id, amount: status.limit })}
                     >
-                      ✎
+                      <PencilSimple size={ICON.md} />
                     </button>
                   )}
                 </li>

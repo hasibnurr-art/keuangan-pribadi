@@ -10,10 +10,11 @@ import { formatMonth, formatMonthShort } from '../lib/format';
 import { formatCompact, formatPercent } from '../lib/money';
 import { CategoryBadge } from './CategoryBadge';
 import { Money, cx, useAmountsHidden } from './controls';
+import { Check, ICON, Warning, X } from './icons';
 
-export const SERIES = { income: '#2a78d6', expense: '#eb6834' } as const;
-const GRID = '#e2e8f0';
-const AXIS_TEXT = '#64748b';
+export const SERIES = { income: 'var(--color-series-income)', expense: 'var(--color-series-expense)' } as const;
+const GRID = 'var(--color-chart-grid)';
+const AXIS_TEXT = 'var(--color-chart-axis)';
 
 // ---------------------------------------------------------------- Tren 6 bulan
 
@@ -203,7 +204,7 @@ export function CategoryBars({ items }: { items: CategoryBarItem[] }) {
     <ul className="divide-y divide-slate-100">
       {items.map((item) => (
         <li key={item.key}>
-          <Link to={item.to} className="flex items-center gap-3 py-2.5 hover:bg-slate-50">
+          <Link to={item.to} className="flex items-center gap-3 py-2.5 pressable">
             <CategoryBadge icon={item.icon} color={item.color} size="sm" />
             <div className="min-w-0 flex-1">
               <div className="flex items-baseline justify-between gap-2 text-sm">
@@ -232,9 +233,9 @@ export function CategoryBars({ items }: { items: CategoryBarItem[] }) {
 // ---------------------------------------------------------------- Anggaran
 
 const STATUS_STYLE = {
-  ok: { fill: '#0ca30c', track: '#dcfce7', icon: '✓', label: 'Aman', ink: '#ffffff' },
-  warning: { fill: '#fab219', track: '#fef3c7', icon: '!', label: 'Hampir habis', ink: '#0f172a' },
-  over: { fill: '#d03b3b', track: '#fee2e2', icon: '✕', label: 'Terlampaui', ink: '#ffffff' },
+  ok: { fill: 'var(--color-good)', track: 'var(--color-good-tint)', icon: Check, label: 'Aman', ink: '#ffffff' },
+  warning: { fill: 'var(--color-warn)', track: 'var(--color-warn-tint)', icon: Warning, label: 'Hampir habis', ink: '#0f172a' },
+  over: { fill: 'var(--color-bad)', track: 'var(--color-bad-tint)', icon: X, label: 'Terlampaui', ink: '#ffffff' },
 } as const;
 
 export function BudgetMeter({ status }: { status: BudgetStatus }) {
@@ -266,7 +267,7 @@ export function BudgetStatusLabel({ status, className }: { status: BudgetStatus;
         className="flex size-4 items-center justify-center rounded-full text-[10px] font-bold"
         style={{ background: style.fill, color: style.ink }}
       >
-        {style.icon}
+        <style.icon size={ICON.xs} weight="bold" />
       </span>
       {status.status === 'over' ? (
         <>

@@ -1,5 +1,6 @@
 import { useEffect, useRef, type ReactNode } from 'react';
 import { Button } from './controls';
+import { ICON, X } from './icons';
 
 /**
  * Dialog berbasis <dialog> native (fokus terkunci, Esc menutup).
@@ -44,10 +45,10 @@ export function Dialog({
             <button
               type="button"
               aria-label="Tutup"
-              className="flex size-10 items-center justify-center rounded-full text-slate-500 hover:bg-slate-100"
+              className="flex size-11 items-center justify-center rounded-full text-slate-500 hover:bg-slate-100 active:bg-slate-200"
               onClick={onClose}
             >
-              ✕
+              <X size={ICON.md} />
             </button>
           </div>
           <div className="flex-1 overflow-y-auto px-4 py-4">{children}</div>

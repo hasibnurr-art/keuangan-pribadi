@@ -51,7 +51,7 @@ export function SettingsPage() {
             />
             <span className="text-sm">
               <span className="font-medium">Sembunyikan nominal</span>
-              <span className="block text-slate-500">Semua nominal tampil sebagai Rp •••••. Bisa juga lewat tombol 👁 di Beranda.</span>
+              <span className="block text-slate-500">Semua nominal tampil sebagai Rp •••••. Bisa juga lewat tombol mata di Beranda.</span>
             </span>
           </label>
         </Card>
@@ -75,7 +75,7 @@ export function SettingsPage() {
         <Card>
           <h2 className="mb-1 font-semibold">Penyimpanan di perangkat</h2>
           <p className="text-sm text-slate-600">
-            {storage.persisted === true && '✓ Penyimpanan permanen aktif: browser tidak akan menghapus data otomatis.'}
+            {storage.persisted === true && 'Penyimpanan permanen aktif: browser tidak akan menghapus data otomatis.'}
             {storage.persisted === false && 'Penyimpanan permanen belum aktif. Browser bisa menghapus data jika ruang penyimpanan penuh.'}
             {storage.persisted === null && 'Status penyimpanan tidak tersedia di browser ini.'}
           </p>
@@ -91,7 +91,7 @@ export function SettingsPage() {
         <Card>
           <h2 className="mb-1 font-semibold">Pasang ke layar utama</h2>
           {installed ? (
-            <p className="text-sm text-slate-600">✓ Aplikasi sudah terpasang.</p>
+            <p className="text-sm text-slate-600">Aplikasi sudah terpasang di perangkat ini.</p>
           ) : isIOS() ? (
             <p className="text-sm text-slate-600">
               Di Safari: ketuk <strong>Bagikan</strong> → <strong>Tambah ke Layar Utama</strong> → <strong>Tambah</strong>.

@@ -23,6 +23,7 @@ import { AmountInput } from '../../ui/AmountInput';
 import { CategoryBadge } from '../../ui/CategoryBadge';
 import { Alert, Button, Field, Money, PageHeader, Segmented, Select, TextInput, cx, goBack } from '../../ui/controls';
 import { useToast } from '../../ui/toast';
+import { ICON, Minus, Plus } from '../../ui/icons';
 
 type EditableType = Exclude<TransactionType, 'adjustment'>;
 
@@ -260,7 +261,9 @@ function TransactionForm({ existing }: { existing: Existing | null }) {
               className="flex min-h-11 w-full items-center justify-between px-3 text-sm font-medium"
               onClick={() => setFeeOpen(!feeOpen)}
             >
-              <span>{feeOpen ? '− Biaya tambahan' : '+ Biaya tambahan'}</span>
+              <span className="inline-flex items-center gap-1.5">
+                {feeOpen ? <Minus size={ICON.sm} weight="bold" /> : <Plus size={ICON.sm} weight="bold" />} Biaya tambahan
+              </span>
               <span className="text-slate-500">biaya admin / bunga cicilan</span>
             </button>
             {feeOpen && (

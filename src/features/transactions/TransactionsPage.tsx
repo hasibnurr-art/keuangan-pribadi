@@ -15,6 +15,7 @@ import { formatDisplayDate, formatMonth } from '../../lib/format';
 import { Dialog } from '../../ui/Dialog';
 import { TransactionRow } from '../../ui/TransactionRow';
 import { Button, ButtonLink, EmptyState, Field, Money, PageHeader, Select, TextInput } from '../../ui/controls';
+import { FunnelSimple, ICON, MagnifyingGlass, Receipt, X } from '../../ui/icons';
 
 const TYPE_LABEL: Record<TransactionType, string> = {
   expense: 'Pengeluaran',
@@ -96,6 +97,7 @@ export function TransactionsPage() {
             onChange={(e) => setFilter({ ...filter, query: e.target.value || undefined })}
           />
           <Button variant="secondary" onClick={() => setFilterOpen(true)} aria-label="Filter transaksi">
+            <FunnelSimple size={ICON.md} />
             Filter{activeFilterCount(filter) > 0 ? ` (${activeFilterCount(filter)})` : ''}
           </Button>
         </div>
@@ -107,13 +109,13 @@ export function TransactionsPage() {
                 type="button"
                 aria-label={`Hapus filter ${chip.label}`}
                 onClick={() => setFilter({ ...filter, [chip.key]: undefined })}
-                className="flex min-h-9 items-center gap-1 rounded-full bg-brand-100 px-3 text-sm font-medium text-brand-900"
+                className="flex min-h-11 items-center gap-1.5 rounded-full bg-brand-100 px-3 text-sm font-medium text-brand-900 hover:bg-brand-200 active:bg-brand-200"
               >
-                {chip.label} <span aria-hidden>✕</span>
+                {chip.label} <X size={ICON.sm} />
               </button>
             ))}
             <span className="text-sm text-slate-500">{filtered.length} transaksi</span>
-            <button type="button" className="min-h-9 px-2 text-sm font-semibold text-brand-700" onClick={() => setFilter({})}>
+            <button type="button" className="min-h-11 rounded-lg px-2 text-sm font-semibold text-brand-700 hover:bg-brand-50 active:bg-brand-100" onClick={() => setFilter({})}>
               Reset filter
             </button>
           </div>
@@ -121,12 +123,12 @@ export function TransactionsPage() {
       </div>
 
       {transactions.length === 0 ? (
-        <EmptyState icon="📝" title="Belum ada transaksi">
+        <EmptyState icon={Receipt} title="Belum ada transaksi">
           <p className="mb-4">Ketuk + untuk mencatat transaksi pertama Anda.</p>
           <ButtonLink to="/transaksi/baru">Tambah transaksi</ButtonLink>
         </EmptyState>
       ) : filtered.length === 0 ? (
-        <EmptyState icon="🔍" title="Tidak ada transaksi yang cocok">
+        <EmptyState icon={MagnifyingGlass} title="Tidak ada transaksi yang cocok">
           Coba ubah kata kunci atau filter.
         </EmptyState>
       ) : (

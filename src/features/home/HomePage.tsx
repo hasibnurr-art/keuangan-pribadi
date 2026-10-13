@@ -20,6 +20,7 @@ import { BillOccurrenceItem } from '../bills/BillOccurrenceItem';
 import { BackupBanner } from '../data/BackupBanner';
 import { GoalCard } from '../goals/GoalCard';
 import { ButtonLink, Card, EmptyState, Money, PageHeader, useAmountsHidden } from '../../ui/controls';
+import { CaretRight, Eye, EyeSlash, ICON, Receipt } from '../../ui/icons';
 
 export function HomePage() {
   const { transactions, today } = useData();
@@ -36,10 +37,10 @@ export function HomePage() {
             aria-pressed={hidden}
             aria-label={hidden ? 'Tampilkan nominal' : 'Sembunyikan nominal'}
             title={hidden ? 'Tampilkan nominal' : 'Sembunyikan nominal'}
-            className="flex size-11 items-center justify-center rounded-full text-xl hover:bg-slate-200"
+            className="flex size-11 items-center justify-center rounded-full text-slate-700 hover:bg-slate-200 active:bg-slate-300"
             onClick={() => setSetting(db, 'hideAmounts', !hidden)}
           >
-            <span aria-hidden>{hidden ? '🙈' : '👁'}</span>
+            {hidden ? <EyeSlash size={ICON.lg} /> : <Eye size={ICON.lg} />}
           </button>
         }
       />
@@ -56,14 +57,14 @@ export function HomePage() {
           <h2 id="recent" className="mb-2 flex items-center justify-between px-1 text-sm font-semibold text-slate-600">
             <span>Transaksi terbaru</span>
             {recent.length > 0 && (
-              <ButtonLink to="/transaksi" variant="ghost" className="min-h-9">
+              <ButtonLink to="/transaksi" variant="ghost" className="min-h-11">
                 Lihat semua
               </ButtonLink>
             )}
           </h2>
           {recent.length === 0 ? (
             <Card>
-              <EmptyState icon="📝" title="Belum ada transaksi">
+              <EmptyState icon={Receipt} title="Belum ada transaksi">
                 Ketuk + untuk mencatat transaksi pertama Anda.
               </EmptyState>
             </Card>
@@ -96,7 +97,7 @@ function AvailableCard() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="rounded-2xl bg-brand-800 p-5 text-left text-white shadow-sm hover:bg-brand-900"
+        className="rounded-2xl bg-brand-800 p-5 text-left text-white shadow-sm hover:bg-brand-900 active:bg-brand-950"
       >
         <span className="block text-sm text-brand-100">Uang tersedia</span>
         <Money value={result.available} tabular={false} className="block text-[clamp(2rem,10vw,3rem)] leading-tight font-bold" />
@@ -165,12 +166,12 @@ function ThisMonthCard({ month }: { month: string }) {
   const { transactions } = useData();
   const summary = useMemo(() => monthSummary(transactions, month), [transactions, month]);
   return (
-    <Link to="/laporan" className="block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm hover:bg-slate-50">
+    <Link to="/laporan" className="block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm pressable">
       <h2 className="mb-3 flex items-center justify-between text-sm font-semibold text-slate-600">
         <span>{formatMonth(month)}</span>
-        <span className="font-normal text-brand-700">Laporan ›</span>
+        <span className="inline-flex items-center gap-0.5 font-normal text-brand-700">Laporan <CaretRight size={ICON.sm} /></span>
       </h2>
-      <dl className="grid grid-cols-3 gap-2 text-sm">
+      <dl className="grid grid-cols-[repeat(auto-fit,minmax(7.5rem,1fr))] gap-x-3 gap-y-2 text-sm">
         <div>
           <dt className="text-slate-500">Pemasukan</dt>
           <dd className="font-semibold">
@@ -203,8 +204,8 @@ function BillsCard() {
     <section aria-labelledby="bills-card" className="rounded-2xl border border-slate-200 bg-white shadow-sm">
       <h2 className="flex items-center justify-between px-4 pt-4 text-sm font-semibold text-slate-600">
         <span id="bills-card">Tagihan</span>
-        <Link to={bills.length > 0 ? '/tagihan' : '/tagihan/baru'} className="font-normal text-brand-700">
-          {bills.length > 0 ? 'Lihat semua ›' : 'Tambah ›'}
+        <Link to={bills.length > 0 ? '/tagihan' : '/tagihan/baru'} className="-my-3 inline-flex min-h-11 shrink-0 items-center gap-0.5 whitespace-nowrap font-normal text-brand-700">
+          {bills.length > 0 ? 'Lihat semua' : 'Tambah'} <CaretRight size={ICON.sm} />
         </Link>
       </h2>
       {bills.length === 0 ? (
@@ -238,8 +239,8 @@ function GoalsCard() {
     <section aria-labelledby="goals-card" className="rounded-2xl border border-slate-200 bg-white shadow-sm">
       <h2 className="flex items-center justify-between px-4 pt-4 text-sm font-semibold text-slate-600">
         <span id="goals-card">Target tabungan</span>
-        <Link to="/target" className="font-normal text-brand-700">
-          Lihat semua ›
+        <Link to="/target" className="-my-3 inline-flex min-h-11 shrink-0 items-center gap-0.5 whitespace-nowrap font-normal text-brand-700">
+          Lihat semua <CaretRight size={ICON.sm} />
         </Link>
       </h2>
       <ul className="divide-y divide-slate-100">
@@ -264,8 +265,8 @@ function BudgetCard({ month }: { month: string }) {
     <Card>
       <h2 className="mb-3 flex items-center justify-between text-sm font-semibold text-slate-600">
         <span>Anggaran</span>
-        <Link to="/anggaran" className="font-normal text-brand-700">
-          {top.length > 0 ? 'Lihat semua ›' : 'Atur ›'}
+        <Link to="/anggaran" className="-my-3 inline-flex min-h-11 shrink-0 items-center gap-0.5 whitespace-nowrap font-normal text-brand-700">
+          {top.length > 0 ? 'Lihat semua' : 'Atur'} <CaretRight size={ICON.sm} />
         </Link>
       </h2>
       {top.length === 0 ? (
@@ -301,12 +302,12 @@ function BudgetCard({ month }: { month: string }) {
 function AccountsCard() {
   const { totals } = useData();
   return (
-    <Link to="/akun" className="block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm hover:bg-slate-50">
+    <Link to="/akun" className="block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm pressable">
       <h2 className="mb-3 flex items-center justify-between text-sm font-semibold text-slate-600">
         <span>Akun</span>
-        <span className="font-normal text-brand-700">Lihat akun ›</span>
+        <span className="inline-flex items-center gap-0.5 font-normal text-brand-700">Lihat akun <CaretRight size={ICON.sm} /></span>
       </h2>
-      <dl className="grid grid-cols-3 gap-2 text-sm">
+      <dl className="grid grid-cols-[repeat(auto-fit,minmax(7.5rem,1fr))] gap-x-3 gap-y-2 text-sm">
         <div>
           <dt className="text-slate-500">Total kas</dt>
           <dd className="font-semibold">

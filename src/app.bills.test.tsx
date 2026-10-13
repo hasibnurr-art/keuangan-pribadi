@@ -94,7 +94,7 @@ describe('Tagihan rutin (M4)', () => {
   });
 
   it('halaman Tagihan: status Dibayar dan lewati bulan depan (bisa dibatalkan)', async () => {
-    await user.click(screen.getByRole('link', { name: 'Lihat semua ›' }));
+    await user.click(within(screen.getByRole('region', { name: 'Tagihan' })).getByRole('link', { name: 'Lihat semua' }));
     const thisMonth = await screen.findByRole('region', { name: /^Bulan ini/ });
     expect(within(thisMonth).getByText('Dibayar')).toBeTruthy();
     expect(within(thisMonth).getByText('Rp412.500')).toBeTruthy();

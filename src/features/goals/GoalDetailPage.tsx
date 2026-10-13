@@ -113,7 +113,7 @@ export function GoalDetailPage() {
 
         {!progress.done && (
           <Card>
-            <dl className="grid grid-cols-2 gap-x-3 gap-y-3 text-sm">
+            <dl className="grid grid-cols-[repeat(auto-fit,minmax(8.5rem,1fr))] gap-x-3 gap-y-3 text-sm">
               <div>
                 <dt className="text-slate-500">Kekurangan</dt>
                 <dd className="font-semibold">

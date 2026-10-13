@@ -9,6 +9,7 @@ import { addMonths, toYearMonth } from '../../lib/date';
 import { formatMonth } from '../../lib/format';
 import { ButtonLink, Card, EmptyState, Money, PageHeader } from '../../ui/controls';
 import { BillOccurrenceItem } from './BillOccurrenceItem';
+import { ICON, Invoice, Plus } from '../../ui/icons';
 
 export function BillsPage() {
   const { bills, transactions, billSkips, today, accountsById } = useData();
@@ -18,11 +19,11 @@ export function BillsPage() {
 
   return (
     <>
-      <PageHeader title="Tagihan" back actions={<ButtonLink to="/tagihan/baru" variant="ghost">+ Tambah</ButtonLink>} />
+      <PageHeader title="Tagihan" back actions={<ButtonLink to="/tagihan/baru" variant="ghost"><Plus size={ICON.sm} weight="bold" /> Tambah</ButtonLink>} />
       <div className="flex flex-col gap-4 p-4">
         {bills.length === 0 ? (
           <Card>
-            <EmptyState icon="🧾" title="Belum ada tagihan rutin">
+            <EmptyState icon={Invoice} title="Belum ada tagihan rutin">
               <p className="mb-4">
                 Catat tagihan bulanan seperti listrik, internet, cicilan, atau kartu kredit. Aplikasi akan mengingatkan
                 saat jatuh tempo dan menghitungnya di Uang tersedia.
@@ -51,7 +52,7 @@ export function BillsPage() {
               <ul className="divide-y divide-slate-100 overflow-hidden rounded-2xl border border-slate-200 bg-white">
                 {sortedBills.map((bill) => (
                   <li key={bill.id}>
-                    <Link to={`/tagihan/${bill.id}`} className="flex min-h-14 items-center gap-3 px-4 py-2 hover:bg-slate-50">
+                    <Link to={`/tagihan/${bill.id}`} className="flex min-h-14 items-center gap-3 px-4 py-2 pressable">
                       <div className="min-w-0 flex-1">
                         <p className="truncate font-medium">
                           {bill.name}

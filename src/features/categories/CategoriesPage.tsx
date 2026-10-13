@@ -9,6 +9,7 @@ import { CategoryBadge, SWATCH_CLASSES } from '../../ui/CategoryBadge';
 import { Dialog } from '../../ui/Dialog';
 import { Alert, Button, Field, PageHeader, Segmented, TextInput, cx } from '../../ui/controls';
 import { useToast } from '../../ui/toast';
+import { CaretDown, CaretUp, ICON, Plus } from '../../ui/icons';
 
 export function CategoriesPage() {
   const { categories } = useData();
@@ -41,7 +42,7 @@ export function CategoriesPage() {
             variant="ghost"
             onClick={() => setEditing({ id: crypto.randomUUID(), name: '', type, icon: '📦', color: 'slate' })}
           >
-            + Tambah
+            <Plus size={ICON.sm} weight="bold" /> Tambah
           </Button>
         }
       />
@@ -62,21 +63,21 @@ export function CategoriesPage() {
             <li key={category.id} className="flex items-center gap-1 pr-2">
               <button
                 type="button"
-                className="flex min-h-14 flex-1 items-center gap-3 px-4 text-left hover:bg-slate-50"
+                className="flex min-h-14 flex-1 items-center gap-3 px-4 text-left pressable"
                 onClick={() => setEditing({ ...category })}
               >
                 <CategoryBadge icon={category.icon} color={category.color} />
                 <span className="font-medium">{category.name}</span>
               </button>
               <MoveButton label={`Naikkan ${category.name}`} disabled={index === 0} onClick={() => moveCategory(db, category.id, -1)}>
-                ↑
+                <CaretUp size={ICON.md} />
               </MoveButton>
               <MoveButton
                 label={`Turunkan ${category.name}`}
                 disabled={index === active.length - 1}
                 onClick={() => moveCategory(db, category.id, 1)}
               >
-                ↓
+                <CaretDown size={ICON.md} />
               </MoveButton>
             </li>
           ))}
@@ -107,14 +108,14 @@ export function CategoriesPage() {
   );
 }
 
-function MoveButton({ label, disabled, onClick, children }: { label: string; disabled: boolean; onClick: () => void; children: string }) {
+function MoveButton({ label, disabled, onClick, children }: { label: string; disabled: boolean; onClick: () => void; children: React.ReactNode }) {
   return (
     <button
       type="button"
       aria-label={label}
       disabled={disabled}
       onClick={onClick}
-      className="flex size-11 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 disabled:opacity-30"
+      className="flex size-11 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 active:bg-slate-200 disabled:opacity-30"
     >
       {children}
     </button>

@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { useData } from '../../app/data';
-import { ACCOUNT_KIND_ICON, ACCOUNT_KIND_LABEL } from '../../domain/defaults';
+import { ACCOUNT_KIND_LABEL } from '../../domain/defaults';
 import type { Account, AccountGroup } from '../../domain/types';
 import { ButtonLink, Card, EmptyState, Money, PageHeader } from '../../ui/controls';
+import { AccountKindBadge, CreditCard, ICON, Plus, Wallet } from '../../ui/icons';
 
 export function AccountsPage() {
   const { accounts, totals } = useData();
@@ -12,7 +13,7 @@ export function AccountsPage() {
 
   return (
     <>
-      <PageHeader title="Akun" actions={<ButtonLink to="/akun/baru" variant="ghost">+ Tambah</ButtonLink>} />
+      <PageHeader title="Akun" actions={<ButtonLink to="/akun/baru" variant="ghost"><Plus size={ICON.sm} weight="bold" /> Tambah</ButtonLink>} />
       <div className="flex flex-col gap-4 p-4">
         <NetWorthCard totals={totals} />
         <AccountGroupList group="asset" title="Aset / kas" showArchived={showArchived} />
@@ -71,7 +72,7 @@ function AccountGroupList({ group, title, showArchived }: { group: AccountGroup;
       </h2>
       {list.length === 0 ? (
         <Card>
-          <EmptyState icon={group === 'asset' ? '🏦' : '💳'} title={group === 'asset' ? 'Belum ada akun aset' : 'Belum ada akun utang'}>
+          <EmptyState icon={group === 'asset' ? Wallet : CreditCard} title={group === 'asset' ? 'Belum ada akun aset' : 'Belum ada akun utang'}>
             {group === 'liability' && 'Tambahkan kartu kredit, PayLater, atau pinjaman agar utang ikut tercatat.'}
           </EmptyState>
         </Card>
@@ -92,10 +93,8 @@ export function AccountRow({ account }: { account: Account }) {
   const { balances } = useData();
   const balance = balances.get(account.id) ?? 0;
   return (
-    <Link to={`/akun/${account.id}`} className="flex min-h-16 items-center gap-3 px-4 py-2 hover:bg-slate-50">
-      <span aria-hidden className="flex size-10 items-center justify-center rounded-full bg-slate-100 text-xl">
-        {ACCOUNT_KIND_ICON[account.kind]}
-      </span>
+    <Link to={`/akun/${account.id}`} className="flex min-h-16 items-center gap-3 px-4 py-2 pressable">
+      <AccountKindBadge kind={account.kind} />
       <div className="min-w-0 flex-1">
         <p className="truncate font-medium">
           {account.name}

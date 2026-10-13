@@ -107,7 +107,7 @@ export function SafeMode() {
                     {b.endMonth ? ` s.d. ${b.endMonth}` : ''}
                   </p>
                 </div>
-                <button type="button" onClick={() => toggleBill(b)} className="min-h-10 rounded-lg border border-slate-300 px-3 font-semibold">
+                <button type="button" onClick={() => toggleBill(b)} className="min-h-11 rounded-lg border border-slate-300 px-3 font-semibold">
                   {b.active ? 'Nonaktifkan' : 'Aktifkan'}
                 </button>
               </li>

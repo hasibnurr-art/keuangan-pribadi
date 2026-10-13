@@ -28,14 +28,14 @@ export function UpdateBanner() {
         <span className="flex-1">Versi baru tersedia.</span>
         <button
           type="button"
-          className="min-h-10 rounded-lg px-3 font-semibold text-brand-100 hover:bg-white/10"
+          className="min-h-11 rounded-lg px-3 font-semibold text-brand-100 hover:bg-white/10"
           onClick={() => setNeedRefresh(false)}
         >
           Nanti
         </button>
         <button
           type="button"
-          className="min-h-10 rounded-lg bg-white px-3 font-semibold text-brand-900"
+          className="min-h-11 rounded-lg bg-white px-3 font-semibold text-brand-900"
           onClick={() => updateServiceWorker(true)}
         >
           Muat ulang

@@ -1,11 +1,12 @@
 import { NavLink, Outlet, useLocation } from 'react-router';
 import { cx } from '../ui/controls';
+import { ChartBar, DotsThreeOutline, House, ICON, Plus, Receipt } from '../ui/icons';
 
 const NAV = [
-  { to: '/', label: 'Beranda', icon: '🏠', end: true },
-  { to: '/transaksi', label: 'Transaksi', icon: '📋', end: true },
-  { to: '/laporan', label: 'Laporan', icon: '📊', end: true },
-  { to: '/lainnya', label: 'Lainnya', icon: '☰', end: false },
+  { to: '/', label: 'Beranda', icon: House, end: true },
+  { to: '/transaksi', label: 'Transaksi', icon: Receipt, end: true },
+  { to: '/laporan', label: 'Laporan', icon: ChartBar, end: true },
+  { to: '/lainnya', label: 'Lainnya', icon: DotsThreeOutline, end: false },
 ];
 
 /** Form layar penuh tidak menampilkan navigasi bawah agar fokus. */
@@ -17,14 +18,24 @@ export function Shell() {
 
   return (
     <div className="min-h-dvh lg:flex">
+      <a
+        href="#konten"
+        onClick={(e) => {
+          e.preventDefault();
+          document.getElementById('konten')?.focus();
+        }}
+        className="sr-only z-50 rounded-xl bg-brand-800 px-4 py-3 font-semibold text-white focus:not-sr-only focus:fixed focus:top-2 focus:left-2"
+      >
+        Lewati ke konten
+      </a>
       <aside className="hidden w-60 shrink-0 border-r border-slate-200 bg-white lg:block">
         <div className="sticky top-0 flex h-dvh flex-col gap-1 p-4">
           <p className="mb-4 px-3 text-lg font-bold text-brand-800">Keuangan Pribadi</p>
           <NavLink
             to="/transaksi/baru"
-            className="mb-3 flex min-h-11 items-center justify-center gap-2 rounded-xl bg-brand-700 font-semibold text-white hover:bg-brand-800"
+            className="mb-3 flex min-h-11 items-center justify-center gap-2 rounded-xl bg-brand-700 font-semibold text-white hover:bg-brand-800 active:bg-brand-900"
           >
-            <span aria-hidden>＋</span> Tambah transaksi
+            <Plus size={ICON.md} weight="bold" /> Tambah transaksi
           </NavLink>
           {NAV.map((item) => (
             <NavLink
@@ -38,15 +49,19 @@ export function Shell() {
                 )
               }
             >
-              <span aria-hidden>{item.icon}</span>
-              {item.label}
+              {({ isActive }) => (
+                <>
+                  <item.icon size={ICON.md} weight={isActive ? 'fill' : 'regular'} />
+                  {item.label}
+                </>
+              )}
             </NavLink>
           ))}
         </div>
       </aside>
 
       <div className="mx-auto w-full max-w-3xl flex-1 lg:px-6">
-        <main className={cx(!fullscreen && 'pb-[calc(5.5rem+env(safe-area-inset-bottom))] lg:pb-8')}>
+        <main id="konten" tabIndex={-1} className={cx('outline-none', !fullscreen && 'pb-[calc(5.5rem+env(safe-area-inset-bottom))] lg:pb-8')}>
           <Outlet />
         </main>
       </div>
@@ -64,9 +79,9 @@ export function Shell() {
               <NavLink
                 to="/transaksi/baru"
                 aria-label="Tambah transaksi"
-                className="-mt-6 flex size-14 items-center justify-center rounded-full bg-brand-700 text-3xl text-white shadow-lg hover:bg-brand-800"
+                className="-mt-6 flex size-14 items-center justify-center rounded-full bg-brand-700 text-3xl text-white shadow-lg hover:bg-brand-800 active:bg-brand-900"
               >
-                <span aria-hidden>＋</span>
+                <Plus size={ICON.lg} weight="bold" />
               </NavLink>
             </li>
             {NAV.slice(2).map((item) => (
@@ -79,7 +94,7 @@ export function Shell() {
   );
 }
 
-function NavItem({ to, label, icon, end }: (typeof NAV)[number]) {
+function NavItem({ to, label, icon: Icon, end }: (typeof NAV)[number]) {
   return (
     <li>
       <NavLink
@@ -92,10 +107,12 @@ function NavItem({ to, label, icon, end }: (typeof NAV)[number]) {
           )
         }
       >
-        <span aria-hidden className="text-lg">
-          {icon}
-        </span>
-        {label}
+        {({ isActive }) => (
+          <>
+            <Icon size={ICON.lg} weight={isActive ? 'fill' : 'regular'} />
+            {label}
+          </>
+        )}
       </NavLink>
     </li>
   );

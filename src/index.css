@@ -10,11 +10,30 @@
   --color-brand-700: #1d4a7f;
   --color-brand-800: #173b66;
   --color-brand-900: #102a4a;
+  --color-brand-950: #0b1d33;
+
+  /* Token semantik (dipakai komponen, bukan hex mentah). Status selalu disertai ikon + teks. */
+  --color-good: #0ca30c;
+  --color-good-tint: #dcfce7;
+  --color-warn: #fab219;
+  --color-warn-tint: #fef3c7;
+  --color-bad: #d03b3b;
+  --color-bad-tint: #fee2e2;
+  --color-neutral-dot: #94a3b8;
+  /* Seri grafik — palet tervalidasi (CVD ΔE 24.7). */
+  --color-series-income: #2a78d6;
+  --color-series-expense: #eb6834;
+  --color-progress-track: #dbe7f5;
+  --color-chart-grid: #e2e8f0;
+  --color-chart-axis: #64748b;
 }
 
 @layer base {
   html {
     -webkit-tap-highlight-color: transparent;
+    /* Fokus keyboard tidak tertutup header sticky / navigasi bawah / tombol simpan. */
+    scroll-padding-top: 4.5rem;
+    scroll-padding-bottom: 7rem;
   }
   body {
     @apply bg-slate-50 text-slate-900 antialiased;
@@ -22,11 +41,51 @@
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-brand-500;
   }
+  /* Tailwind v4 tidak lagi memberi kursor pointer pada tombol. */
+  button:not(:disabled),
+  [role='button'],
+  [role='radio'],
+  select,
+  summary,
+  label:has(> input[type='checkbox']) {
+    cursor: pointer;
+  }
+  /* Hilangkan jeda ketuk 300 ms di browser seluler. */
+  a,
+  button,
+  input,
+  select,
+  textarea,
+  label {
+    touch-action: manipulation;
+  }
   dialog::backdrop {
     background: rgb(15 23 42 / 0.45);
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 @utility tabular {
   font-variant-numeric: tabular-nums;
+}
+
+/* Umpan balik tekan untuk baris/tautan daftar (tanpa menggeser layout). */
+@utility pressable {
+  transition: background-color 150ms ease-out;
+  &:hover {
+    background-color: var(--color-slate-50);
+  }
+  &:active {
+    background-color: var(--color-slate-100);
+  }
 }
