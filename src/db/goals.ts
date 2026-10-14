@@ -1,6 +1,7 @@
 // Operasi tulis target tabungan (PRD §9.14).
 
 import { computeBalances } from '../domain/balance';
+import { billHasPayments } from '../domain/billRules';
 import type { AccountDraft } from '../domain/entityRules';
 import { validateGoal, type GoalDraft, type GoalErrors } from '../domain/goals';
 import type { Goal, ID, LocalDate, Rupiah } from '../domain/types';
@@ -111,8 +112,32 @@ export async function updateGoal(db: KeuanganDB, draft: GoalDraft, today: LocalD
   });
 }
 
+/**
+ * Hentikan setoran rutin (tagihan transfer ke akun target) saat target selesai/dihapus,
+ * kecuali akun itu masih dipakai target aktif lain. Tagihan tanpa riwayat pembayaran
+ * dihapus jika `remove`; selain itu dinonaktifkan agar riwayatnya tetap ada.
+ */
+async function stopDeposits(db: KeuanganDB, goal: Goal, remove: boolean): Promise<void> {
+  const others = (await db.goals.toArray()).filter((g) => g.id !== goal.id && !g.archived && g.accountId === goal.accountId);
+  if (others.length > 0) return;
+  const bills = (await db.bills.toArray()).filter((b) => b.kind === 'transfer' && b.toAccountId === goal.accountId);
+  if (bills.length === 0) return;
+  const transactions = await db.transactions.toArray();
+  for (const bill of bills) {
+    if (remove && !billHasPayments(bill.id, transactions)) {
+      await db.billSkips.where('[billId+period]').between([bill.id, ''], [bill.id, '￿']).delete();
+      await db.bills.delete(bill.id);
+    } else if (bill.active) {
+      await db.bills.put({ ...bill, active: false });
+    }
+  }
+}
+
+const GOAL_TABLES = (db: KeuanganDB) => [db.goals, db.bills, db.billSkips, db.transactions, db.settings];
+
+/** Mengarsipkan target juga menghentikan setoran rutinnya (tidak diaktifkan ulang otomatis). */
 export async function setGoalArchived(db: KeuanganDB, goalId: ID, archived: boolean, now: Date = new Date()): Promise<void> {
-  await db.transaction('rw', [db.goals, db.settings], async () => {
+  await db.transaction('rw', GOAL_TABLES(db), async () => {
     const goal = await db.goals.get(goalId);
     if (!goal) throw new Error('Target tidak ditemukan.');
     if (!archived) {
@@ -120,14 +145,18 @@ export async function setGoalArchived(db: KeuanganDB, goalId: ID, archived: bool
       if (clash) throw new Error(`Akun target sudah dipakai target aktif "${clash.name}".`);
     }
     await db.goals.put({ ...goal, archived, updatedAt: now.toISOString() });
+    if (archived) await stopDeposits(db, goal, false);
     await touchData(db, now);
   });
 }
 
-/** Menghapus target saja. Akun tabungan, transaksi, dan tagihan setoran tetap ada. */
+/** Menghapus target beserta setoran rutinnya. Akun tabungan dan transaksinya tetap ada. */
 export async function deleteGoal(db: KeuanganDB, goalId: ID, now: Date = new Date()): Promise<void> {
-  await db.transaction('rw', [db.goals, db.settings], async () => {
+  await db.transaction('rw', GOAL_TABLES(db), async () => {
+    const goal = await db.goals.get(goalId);
+    if (!goal) return;
     await db.goals.delete(goalId);
+    await stopDeposits(db, goal, true);
     await touchData(db, now);
   });
 }

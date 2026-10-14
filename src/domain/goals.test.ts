@@ -4,6 +4,7 @@ import { parseBackup } from '../backup/validate';
 import { createBackup, serializeBackup, type BackupFile } from '../backup/format';
 import { restoreBackup } from '../backup/restore';
 import { saveAccount, setAccountArchived, deleteAccount } from '../db/accounts';
+import { saveBill, setBillSkipped } from '../db/bills';
 import { GoalValidationError, createGoal, deleteGoal, setGoalArchived, updateGoal } from '../db/goals';
 import { completeOnboarding } from '../db/onboarding';
 import { KeuanganDB } from '../db/schema';
@@ -199,6 +200,32 @@ describe('Repositori target', () => {
     await deleteGoal(db, 'rumah');
     expect(await db.goals.count()).toBe(0);
     expect(await db.accounts.get('tab')).toBeDefined();
+  });
+
+  it('hapus target ikut menghapus setoran rutinnya; yang sudah pernah dibayar hanya dinonaktifkan', async () => {
+    const deposit = { amount: 1_000_000, dueDay: 26, fromAccountId: 'bca' };
+    await createGoal(db, { goal: draft, newAccount: { ...base, id: 'tab', name: 'Tab', openingBalance: 0 }, deposit, today: TODAY });
+    const [bill] = await db.bills.toArray();
+    await setBillSkipped(db, { billId: bill.id, period: '2026-11', skipped: true });
+    await saveBill(db, { id: 'lain', name: 'Listrik', kind: 'expense', amount: 300_000, isVariable: false, dueDay: 5, accountId: 'bca', categoryId: 'cat-tagihan', startMonth: '2026-10' });
+
+    await deleteGoal(db, 'rumah');
+    expect((await db.bills.toArray()).map((b) => b.id)).toEqual(['lain']);
+    expect(await db.billSkips.count()).toBe(0);
+    expect(await db.accounts.get('tab')).toBeDefined();
+
+    await createGoal(db, { goal: { ...draft, id: 'mobil' }, deposit, today: TODAY });
+    const paid = (await db.bills.toArray()).find((b) => b.toAccountId === 'tab')!;
+    await saveTransaction(db, { id: 'p', type: 'transfer', date: TODAY, amount: 1_000_000, accountId: 'bca', toAccountId: 'tab', billId: paid.id, billPeriod: '2026-10' }, { today: TODAY });
+    await deleteGoal(db, 'mobil');
+    expect(await db.bills.get(paid.id)).toMatchObject({ active: false });
+    expect(await db.transactions.get('p')).toBeDefined();
+  });
+
+  it('arsipkan target menonaktifkan setoran rutinnya', async () => {
+    await createGoal(db, { goal: draft, newAccount: { ...base, id: 'tab', name: 'Tab', openingBalance: 0 }, deposit: { amount: 1_000_000, dueDay: 26, fromAccountId: 'bca' }, today: TODAY });
+    await setGoalArchived(db, 'rumah', true);
+    expect((await db.bills.toArray()).map((b) => b.active)).toEqual([false]);
   });
 
   it('backup → restore membawa target; file backup v1 tetap bisa dipulihkan', async () => {

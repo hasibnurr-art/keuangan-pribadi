@@ -72,7 +72,9 @@ export function GoalDetailPage() {
     setError(null);
     try {
       await setGoalArchived(db, goal!.id, !goal!.archived);
-      toast({ message: goal!.archived ? 'Target diaktifkan kembali' : 'Target diarsipkan' });
+      toast({
+        message: goal!.archived ? 'Target diaktifkan kembali' : depositBill ? 'Target diarsipkan, setoran rutin dihentikan' : 'Target diarsipkan',
+      });
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Gagal mengubah target.');
     }
@@ -81,7 +83,7 @@ export function GoalDetailPage() {
   async function remove() {
     setDeleteOpen(false);
     await deleteGoal(db, goal!.id);
-    toast({ message: 'Target dihapus. Akun tabungan dan transaksinya tetap ada.' });
+    toast({ message: depositBill ? 'Target dan setoran rutinnya dihapus' : 'Target dihapus' });
     navigate('/target', { replace: true });
   }
 
@@ -209,7 +211,7 @@ export function GoalDetailPage() {
       <ConfirmDialog
         open={deleteOpen}
         title="Hapus target?"
-        message={`Target ${goal.name} akan dihapus. Akun ${account.name}, saldonya, dan transaksinya TIDAK ikut terhapus.`}
+        message={`Target ${goal.name}${depositBill ? ' dan setoran rutinnya' : ''} akan dihapus. Akun ${account.name}, saldonya, dan transaksinya TIDAK ikut terhapus.`}
         confirmLabel="Hapus"
         danger
         onConfirm={remove}

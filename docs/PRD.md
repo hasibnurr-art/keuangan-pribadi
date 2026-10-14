@@ -541,7 +541,7 @@ Di header ada tombol 👁 untuk sembunyikan/tampilkan nominal (F-14), yang berla
 | Proyeksi / simulasi | Bulan tercapai = bulan ini + ⌈sisa ÷ setoran per bulan⌉ − 1 |
 | Saran Dana Darurat | Rata-rata pengeluaran 3 bulan penuh terakhir × 3/6/12 (default 6), dibulatkan ke atas ke Rp100.000 |
 
-**Fitur:** kartu target (progres, status jadwal dengan ikon + teks), detail (kekurangan, perlu/bulan, rata-rata, proyeksi), tonggak 25/50/75/100% dengan pesan netral, simulasi dua arah, setoran rutin opsional sebagai tagihan Transfer bulanan "Nabung …" (s.d. bulan target) yang otomatis mengurangi Uang tersedia, template Dana Darurat, kartu di Beranda (maks. 2 target, tenggat terdekat), arsip/selesai, hapus (akun & transaksi tetap ada).
+**Fitur:** kartu target (progres, status jadwal dengan ikon + teks), detail (kekurangan, perlu/bulan, rata-rata, proyeksi), tonggak 25/50/75/100% dengan pesan netral, simulasi dua arah, setoran rutin opsional sebagai tagihan Transfer bulanan "Nabung …" (s.d. bulan target) yang otomatis mengurangi Uang tersedia, template Dana Darurat, kartu di Beranda (maks. 2 target, tenggat terdekat), arsip/selesai (setoran rutin dinonaktifkan), hapus (setoran rutin ikut dihapus, atau dinonaktifkan jika sudah pernah dibayar; akun & transaksi tetap ada).
 
 **Aturan:** pembuatan target (akun baru + target + tagihan setoran) atomik; akun yang dipakai target aktif tidak bisa diarsipkan/dihapus; akun target tidak bisa diganti setelah dibuat; backup v1 dimigrasikan otomatis (`goals: []`).
 
