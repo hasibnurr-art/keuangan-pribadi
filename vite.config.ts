@@ -29,11 +29,13 @@ export default defineConfig({
         orientation: 'portrait',
         background_color: '#f3f6f5',
         theme_color: '#0b6a60',
+        // Nama file ikon memuat nama logo: jika logo diganti, ganti juga nama filenya agar
+        // Android memperbarui ikon & layar pembuka aplikasi yang sudah terpasang.
         icons: [
-          { src: 'pwa-64x64.png', sizes: '64x64', type: 'image/png' },
-          { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
-          { src: 'pwa-512x512.png', sizes: '512x512', type: 'image/png' },
-          { src: 'maskable-icon-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+          { src: 'icons/dompet-waras-64.png', sizes: '64x64', type: 'image/png' },
+          { src: 'icons/dompet-waras-192.png', sizes: '192x192', type: 'image/png' },
+          { src: 'icons/dompet-waras-512.png', sizes: '512x512', type: 'image/png' },
+          { src: 'icons/dompet-waras-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ],
       },
       workbox: {
