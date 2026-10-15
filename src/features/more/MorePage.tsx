@@ -17,15 +17,15 @@ export function MorePage() {
     <>
       <PageHeader title="Lainnya" />
       <div className="flex flex-col gap-4 p-4">
-        <ul className="divide-y divide-slate-100 overflow-hidden rounded-2xl border border-slate-200 bg-white">
+        <ul className="divide-y divide-slate-100 overflow-hidden rounded-[20px] border border-slate-200 bg-surface">
           {LINKS.map((link) => (
             <li key={link.to}>
               <Link to={link.to} className="flex min-h-16 items-center gap-3 px-4 py-2 pressable">
-                <span aria-hidden className="flex size-10 items-center justify-center rounded-full bg-brand-50 text-brand-700">
+                <span aria-hidden className="flex size-10 items-center justify-center rounded-[13px] bg-brand-50 text-brand-700">
                   <link.icon size={ICON.md} />
                 </span>
                 <span className="flex-1">
-                  <span className="block font-medium">{link.label}</span>
+                  <span className="block font-semibold">{link.label}</span>
                   <span className="block text-sm text-slate-500">{link.hint}</span>
                 </span>
                 <CaretRight size={ICON.md} className="text-slate-400" />

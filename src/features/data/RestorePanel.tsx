@@ -89,7 +89,7 @@ export function RestorePanel({ onRestored, buttonLabel = 'Pilih file backup…' 
       >
         {pending && (
           <div className="flex flex-col gap-4 text-sm">
-            <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 rounded-xl bg-slate-50 p-3">
+            <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 rounded-[14px] bg-slate-50 p-3">
               <dt className="text-slate-500">Dibuat</dt>
               <dd className="font-medium">{formatDateTime(pending.summary.exportedAt)}</dd>
               {COUNT_LABEL.map(([key, label]) => (

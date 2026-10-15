@@ -1,5 +1,7 @@
 # Product Requirements Document (PRD)
-## Aplikasi Keuangan Pribadi — Local-First PWA
+## Dompet Waras (dulu "Aplikasi Keuangan Pribadi") — Local-First PWA
+
+> Tetap waras di tengah gempuran ekonomi. Nama, logo dompet berplester, desain teal + mode gelap, dan sapaan bernama sejak v0.7.
 
 **Versi:** v2.1 — MVP terpasang + Target tabungan
 **Tanggal:** 13 Oktober 2026
@@ -19,7 +21,7 @@ Keputusan berikut diambil saat sesi review PRD dan menjadi dasar seluruh dokumen
 | K-1 | Untuk siapa | Alat pribadi untuk pemilik dan keluarga, bukan produk publik | Tidak ada registrasi publik, monetisasi, analytics, atau gate legal komersial. |
 | K-2 | Pola keluarga | Data setiap orang **terpisah total** dan tidak terhubung | Tidak ada fitur berbagi, peran, atau transaksi bersama. Aplikasi bersifat satu pengguna. |
 | K-3 | Penyimpanan | **Local-only PWA**: data hanya di browser perangkat (IndexedDB) | Tanpa server, tanpa login, tanpa sinkron antarperangkat. Backup menjadi fitur kritis. |
-| K-4 | Backup | **Manual**: file `.json` + pengingat | Pengingat muncul jika > 7 hari belum backup. Backup otomatis ke Google Drive masuk Fase 2. |
+| K-4 | Backup | **Manual & mandiri**: file `.json` | Tanpa banner di Beranda (keputusan v0.7): status backup terakhir + tombol Backup sekarang ada di Pengaturan dan Backup & Data. Backup otomatis ke Google Drive masuk Fase 2. |
 | K-5 | Akun & utang | Dua kelompok akun, **Aset** dan **Utang**; hanya 3 jenis transaksi + penyesuaian | Kartu kredit, PayLater, dan pinjaman masuk MVP tanpa jenis transaksi khusus. |
 | K-6 | Periode | **Bulan kalender** (tanggal 1 sampai akhir bulan) | Anggaran, laporan, dan dashboard memakai bulan kalender. |
 | K-7 | Anggaran | Batas per kategori per bulan, berulang otomatis, **tanpa rollover** | Tidak memakai model envelope. |
@@ -92,7 +94,7 @@ Pembeda utamanya: angka selalu akurat dan bisa dijelaskan, mencatat transaksi ce
 | F-09 | Tagihan rutin | Template bulanan; status terlambat/akan datang/dibayar/dilewati; bayar dengan form yang terisi otomatis. |
 | F-10 | Dashboard | Uang tersedia, ringkasan bulan ini, tagihan, anggaran berisiko, saldo akun, kekayaan bersih, transaksi terbaru. |
 | F-11 | Laporan | Pengeluaran per kategori per bulan; tren 6 bulan pemasukan vs pengeluaran; drill-down ke transaksi. |
-| F-12 | Backup & restore | File `.json` lengkap; restore dengan validasi dan preview; pengingat backup. |
+| F-12 | Backup & restore | File `.json` lengkap; restore dengan validasi dan preview; status backup terakhir di Pengaturan. |
 | F-13 | Ekspor CSV | Transaksi ke CSV untuk dibuka di Excel/Sheets. |
 | F-14 | Sembunyikan nominal | Tombol mata untuk menyamarkan semua nominal (`Rp •••••`). |
 | F-15 | PWA & penyimpanan | Install ke layar utama, offline penuh, permintaan *persistent storage*, banner pembaruan versi. |
@@ -144,7 +146,7 @@ Pembeda utamanya: angka selalu akurat dan bisa dijelaskan, mencatat transaksi ce
 | Laporan | Pilih bulan; pemasukan/pengeluaran/selisih; per kategori; tren 6 bulan | Data kurang dari 1 bulan |
 | Kategori | Daftar pemasukan dan pengeluaran; tambah, ubah, arsip | Kategori sedang dipakai saat dihapus |
 | Backup & Data | Backup sekarang, info backup terakhir, Pulihkan, Ekspor CSV, Hapus semua data | Proses berjalan; file tidak valid |
-| Pengaturan | Sembunyikan nominal default, ambang pengingat backup, status penyimpanan permanen, versi aplikasi | — |
+| Pengaturan | Nama panggilan (sapaan Beranda), tema Otomatis/Terang/Gelap, sembunyikan nominal, backup (status + Backup sekarang), status penyimpanan permanen, versi aplikasi | — |
 
 ---
 
@@ -468,8 +470,8 @@ Semua kategori, termasuk default, bisa diubah nama, ikon, dan urutannya, atau di
 
 ## 9.10 Dashboard (F-10)
 Urutan dari atas:
-1. **Banner backup** (jika perlu, §9.12).
-2. **Uang tersedia**: angka besar dengan subteks "setelah tagihan s.d. akhir bulan". Diketuk membuka rincian.
+1. **Sapaan** ("Selamat pagi, {nama panggilan}") + bulan berjalan + tombol sembunyikan nominal.
+2. **Uang tersedia**: angka besar dengan rincian Kas dan Tagihan bulan ini, diikuti aksi cepat Keluar · Masuk · Transfer · Tagihan. Diketuk membuka rincian.
 3. **Bulan ini**: Pemasukan · Pengeluaran · Selisih. Diketuk membuka Laporan bulan ini.
 4. **Tagihan**: yang terlambat (teks "Terlambat X hari" + ikon) dan yang jatuh tempo ≤ 14 hari ke depan, maksimal 5. Masing-masing punya tombol Bayar.
 5. **Anggaran**: maksimal 3 kategori dengan persentase tertinggi (yang ≥ 80% didahulukan). Link "Lihat semua".
@@ -504,7 +506,7 @@ Di header ada tombol 👁 untuk sembunyikan/tampilkan nominal (F-14), yang berla
 - Setelah berhasil, simpan `lastBackupAt`.
 - Teks peringatan kecil: *"File backup berisi seluruh data keuangan Anda dan tidak dienkripsi. Simpan di tempat yang aman."*
 
-**Pengingat:** banner dashboard muncul jika ada data **dan** (`lastBackupAt` kosong **atau** sudah > `backupReminderDays` hari) **dan** `lastDataChangeAt > lastBackupAt`. Teks: *"Backup terakhir 9 hari lalu · Backup sekarang"*. Banner bisa ditutup untuk hari itu.
+**Status backup (v0.7):** tidak ada banner di Beranda. Pengaturan dan Backup & Data menampilkan *"Backup terakhir 9 hari lalu"* (atau *"belum pernah"*) beserta tombol **Backup sekarang**; pengguna melakukan backup secara mandiri.
 
 **Restore:**
 1. Pilih file.
@@ -613,7 +615,7 @@ Di header ada tombol 👁 untuk sembunyikan/tampilkan nominal (F-14), yang berla
 
 | Risiko | Mitigasi |
 | --- | --- |
-| **Data hilang** (HP rusak/hilang, browser dibersihkan, iOS menghapus data situs) | Pengingat backup, `storage.persist()`, panduan install PWA, peringatan di onboarding. |
+| **Data hilang** (HP rusak/hilang, browser dibersihkan, iOS menghapus data situs) | Status backup di Pengaturan, `storage.persist()`, panduan install PWA, peringatan di onboarding. |
 | Alamat situs berubah sehingga data "hilang" | Alamat dikunci (§6.4); wajib backup sebelum migrasi alamat. |
 | Bug migrasi skema merusak data | Fixture backup per versi + tes migrasi; migrasi dijalankan dalam transaksi. |
 | File backup bocor (misalnya terkirim ke grup WhatsApp yang salah) | Peringatan di UI; backup terenkripsi di Fase 2. |

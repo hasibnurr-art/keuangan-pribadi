@@ -66,7 +66,7 @@ function AccountGroupList({ group, title, showArchived }: { group: AccountGroup;
 
   return (
     <section aria-labelledby={`group-${group}`}>
-      <h2 id={`group-${group}`} className="mb-2 flex items-center justify-between px-1 text-sm font-semibold text-slate-600">
+      <h2 id={`group-${group}`} className="mb-2 flex items-center justify-between px-1 text-base font-bold tracking-tight">
         <span>{title}</span>
         {list.length > 0 && <Money value={subtotal} />}
       </h2>
@@ -77,7 +77,7 @@ function AccountGroupList({ group, title, showArchived }: { group: AccountGroup;
           </EmptyState>
         </Card>
       ) : (
-        <ul className="divide-y divide-slate-100 overflow-hidden rounded-2xl border border-slate-200 bg-white">
+        <ul className="divide-y divide-slate-100 overflow-hidden rounded-[20px] border border-slate-200 bg-surface">
           {list.map((account) => (
             <li key={account.id}>
               <AccountRow account={account} />

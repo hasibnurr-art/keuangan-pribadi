@@ -6,13 +6,12 @@ export interface SettingValues {
   onboardingDone: boolean;
   lastBackupAt: string | null;
   lastDataChangeAt: string | null;
-  backupReminderDays: number;
   hideAmounts: boolean;
   feeCategoryId: string | null;
   lastUsedAccountId: string | null;
   installHintDismissed: boolean;
-  /** Tanggal lokal saat banner pengingat backup ditutup (tampil lagi besok). */
-  backupBannerDismissedOn: string | null;
+  /** Nama panggilan untuk sapaan di Beranda; kosong = tanpa nama. */
+  userName: string;
 }
 
 export type SettingKey = keyof SettingValues;
@@ -21,12 +20,11 @@ export const SETTING_DEFAULTS: SettingValues = {
   onboardingDone: false,
   lastBackupAt: null,
   lastDataChangeAt: null,
-  backupReminderDays: 7,
   hideAmounts: false,
   feeCategoryId: null,
   lastUsedAccountId: null,
   installHintDismissed: false,
-  backupBannerDismissedOn: null,
+  userName: '',
 };
 
 export async function getSetting<K extends SettingKey>(db: KeuanganDB, key: K): Promise<SettingValues[K]> {

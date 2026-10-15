@@ -132,18 +132,18 @@ export function TransactionsPage() {
           Coba ubah kata kunci atau filter.
         </EmptyState>
       ) : (
-        <div className="flex flex-col gap-3 pb-4">
+        <div className="flex flex-col gap-5 px-4 pt-1 pb-4">
           {groups.map((group) => (
-            <section key={group.date} aria-label={dayLabel(group.date)} className="bg-white sm:mx-4 sm:rounded-2xl sm:border sm:border-slate-200">
-              <h2 className="flex items-center justify-between border-b border-slate-100 px-4 py-2 text-sm">
-                <span className="font-semibold text-slate-700">{dayLabel(group.date)}</span>
+            <section key={group.date} aria-label={dayLabel(group.date)}>
+              <h2 className="flex items-center justify-between px-1 pb-2 text-sm">
+                <span className="font-bold text-slate-800">{dayLabel(group.date)}</span>
                 {group.expenseTotal !== 0 && (
                   <span className="text-slate-500">
                     Pengeluaran <Money value={group.expenseTotal} />
                   </span>
                 )}
               </h2>
-              <ul className="divide-y divide-slate-100">
+              <ul className="divide-y divide-slate-100 overflow-hidden rounded-[20px] border border-slate-200 bg-surface">
                 {group.transactions.map((tx) => (
                   <li key={tx.id}>
                     <TransactionRow tx={tx} />

@@ -60,7 +60,7 @@ describe('Alur utama aplikasi', () => {
     await user.click(screen.getByRole('button', { name: 'Simpan' }));
 
     await expectTotalCash('Rp1.450.000');
-    const recent = screen.getByRole('heading', { name: /Transaksi terbaru/ }).parentElement!;
+    const recent = screen.getByRole('region', { name: 'Transaksi terbaru' });
     expect(within(recent).getByText('Makan & Minum')).toBeTruthy();
 
     await user.click(await screen.findByRole('button', { name: 'Batalkan' }));

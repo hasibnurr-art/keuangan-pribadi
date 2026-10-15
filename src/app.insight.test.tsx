@@ -56,7 +56,7 @@ describe('Insight (M3)', () => {
     const hero = await screen.findByRole('button', { name: /Uang tersedia/ });
     expect(hero.textContent).toContain('Rp13.800.000');
 
-    const budget = screen.getByRole('heading', { name: /^Anggaran/ }).parentElement!;
+    const budget = screen.getByRole('region', { name: 'Anggaran' });
     expect(within(budget).getByText('Makan & Minum')).toBeTruthy();
     expect(within(budget).getByText(/Hampir habis/)).toBeTruthy();
     expect(within(budget).getByRole('meter').getAttribute('aria-valuenow')).toBe('90');

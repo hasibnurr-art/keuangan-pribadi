@@ -46,10 +46,10 @@ export function BillsPage() {
             />
 
             <section aria-labelledby="all-bills">
-              <h2 id="all-bills" className="mb-2 px-1 text-sm font-semibold text-slate-600">
+              <h2 id="all-bills" className="mb-2 px-1 text-base font-bold tracking-tight">
                 Semua tagihan
               </h2>
-              <ul className="divide-y divide-slate-100 overflow-hidden rounded-2xl border border-slate-200 bg-white">
+              <ul className="divide-y divide-slate-100 overflow-hidden rounded-[20px] border border-slate-200 bg-surface">
                 {sortedBills.map((bill) => (
                   <li key={bill.id}>
                     <Link to={`/tagihan/${bill.id}`} className="flex min-h-14 items-center gap-3 px-4 py-2 pressable">
@@ -80,11 +80,11 @@ function Section({ title, items, empty }: { title: string; items: BillOccurrence
   if (items.length === 0 && empty === null) return null;
   return (
     <section aria-label={title}>
-      <h2 className="mb-2 px-1 text-sm font-semibold text-slate-600">{title}</h2>
+      <h2 className="mb-2 px-1 text-base font-bold tracking-tight">{title}</h2>
       {items.length === 0 ? (
-        <p className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-500">{empty}</p>
+        <p className="rounded-[20px] border border-slate-200 bg-surface px-4 py-3 text-sm text-slate-500">{empty}</p>
       ) : (
-        <ul className="divide-y divide-slate-100 overflow-hidden rounded-2xl border border-slate-200 bg-white">
+        <ul className="divide-y divide-slate-100 overflow-hidden rounded-[20px] border border-slate-200 bg-surface">
           {items.map((o) => (
             <li key={`${o.bill.id}-${o.period}`}>
               <BillOccurrenceItem occurrence={o} />

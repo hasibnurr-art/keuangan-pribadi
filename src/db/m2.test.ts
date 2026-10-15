@@ -46,7 +46,7 @@ describe('Onboarding', () => {
     expect(await db.accounts.count()).toBe(1);
     expect(await db.categories.count()).toBe(DEFAULT_CATEGORIES.length);
     const settings = await getAllSettings(db);
-    expect(settings).toMatchObject({ onboardingDone: true, feeCategoryId: 'cat-biaya', lastUsedAccountId: 'bca', backupReminderDays: 7 });
+    expect(settings).toMatchObject({ onboardingDone: true, feeCategoryId: 'cat-biaya', lastUsedAccountId: 'bca', userName: '' });
   });
 
   it('diulang tidak membuat akun atau kategori ganda', async () => {

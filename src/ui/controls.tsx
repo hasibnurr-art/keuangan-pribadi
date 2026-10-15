@@ -13,16 +13,16 @@ import { Link, useNavigate } from 'react-router';
 import { useOptionalData } from '../app/data';
 import type { Rupiah } from '../domain/types';
 import { formatRupiah } from '../lib/money';
-import { CaretLeft, ICON, type Icon } from './icons';
+import { CaretLeft, CaretRight, ICON, type Icon } from './icons';
 
 export const cx = (...classes: Array<string | false | null | undefined>) => classes.filter(Boolean).join(' ');
 
 type Variant = 'primary' | 'secondary' | 'danger' | 'ghost';
 
 const VARIANTS: Record<Variant, string> = {
-  primary: 'bg-brand-700 text-white hover:bg-brand-800 active:bg-brand-900 disabled:bg-slate-300',
-  secondary: 'border border-slate-300 bg-white text-slate-800 pressable disabled:text-slate-400',
-  danger: 'border border-red-200 bg-white text-red-700 hover:bg-red-50 active:bg-red-100 disabled:text-slate-400',
+  primary: 'bg-brand-700 text-on-brand hover:bg-brand-800 active:bg-brand-900 disabled:bg-slate-300 disabled:text-slate-600',
+  secondary: 'border border-slate-200 bg-surface text-slate-800 pressable disabled:text-slate-400',
+  danger: 'border border-red-200 bg-surface text-red-700 hover:bg-red-50 active:bg-red-100 disabled:text-slate-400',
   ghost: 'text-brand-700 hover:bg-brand-50 active:bg-brand-100 disabled:text-slate-400',
 };
 
@@ -36,7 +36,7 @@ export function Button({
     <button
       type="button"
       className={cx(
-        'inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition-colors disabled:cursor-not-allowed',
+        'inline-flex min-h-11 items-center justify-center gap-2 rounded-[14px] px-4 text-sm font-semibold transition-colors disabled:cursor-not-allowed',
         VARIANTS[variant],
         block && 'w-full',
         className,
@@ -51,7 +51,7 @@ export function ButtonLink({ to, variant = 'primary', className, children }: { t
     <Link
       to={to}
       className={cx(
-        'inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition-colors',
+        'inline-flex min-h-11 items-center justify-center gap-2 rounded-[14px] px-4 text-sm font-semibold transition-colors',
         VARIANTS[variant],
         className,
       )}
@@ -98,7 +98,7 @@ export function Field({
 }
 
 const inputClass =
-  'min-h-11 w-full rounded-xl border border-slate-300 bg-white px-3 text-base text-slate-900 placeholder:text-slate-400 aria-invalid:border-red-500 disabled:bg-slate-100';
+  'min-h-12 w-full rounded-[14px] border border-slate-200 bg-surface px-3.5 text-base text-slate-900 transition-colors placeholder:text-slate-400 focus:border-brand-600 aria-invalid:border-red-500 disabled:bg-slate-100';
 
 export function TextInput({ className, ...props }: InputHTMLAttributes<HTMLInputElement>) {
   return <input className={cx(inputClass, className)} {...props} />;
@@ -109,7 +109,7 @@ export function Select({ className, ...props }: SelectHTMLAttributes<HTMLSelectE
 }
 
 export function Card({ className, children }: { className?: string; children: ReactNode }) {
-  return <section className={cx('rounded-2xl border border-slate-200 bg-white p-4 shadow-sm', className)}>{children}</section>;
+  return <section className={cx('rounded-[20px] border border-slate-200 bg-surface p-4', className)}>{children}</section>;
 }
 
 /** true jika pengguna menyembunyikan nominal (F-14). */
@@ -150,18 +150,18 @@ export function PageHeader({
 }) {
   const navigate = useNavigate();
   return (
-    <header className="sticky top-0 z-20 flex min-h-14 items-center gap-2 border-b border-slate-200 bg-slate-50/95 px-2 pt-[env(safe-area-inset-top)] backdrop-blur lg:px-0">
+    <header className="sticky top-0 z-20 flex min-h-16 items-center gap-2 bg-canvas/90 px-2 pt-[env(safe-area-inset-top)] backdrop-blur-md lg:px-0">
       {back && (
         <button
           type="button"
           aria-label="Kembali"
-          className="flex size-11 items-center justify-center rounded-full text-xl text-slate-700 hover:bg-slate-200 active:bg-slate-300"
+          className="flex size-11 items-center justify-center rounded-[14px] text-slate-700 hover:bg-slate-200/70 active:bg-slate-200"
           onClick={() => (typeof back === 'string' ? navigate(back) : goBack(navigate))}
         >
           <CaretLeft size={ICON.lg} />
         </button>
       )}
-      <h1 className={cx('flex-1 truncate text-lg font-semibold', !back && 'pl-2 lg:pl-0')}>{title}</h1>
+      <h1 className={cx('flex-1 truncate tracking-tight', back ? 'text-lg font-bold' : 'pl-2 text-[1.375rem] font-extrabold lg:pl-0')}>{title}</h1>
       {actions}
     </header>
   );
@@ -176,10 +176,10 @@ export function goBack(navigate: ReturnType<typeof useNavigate>, fallback = '/')
 export function EmptyState({ icon: IconCmp, title, children }: { icon: Icon; title: string; children?: ReactNode }) {
   return (
     <div className="flex flex-col items-center gap-2 px-6 py-12 text-center">
-      <span className="mb-1 flex size-14 items-center justify-center rounded-full bg-slate-100 text-slate-500">
+      <span className="mb-1 flex size-14 items-center justify-center rounded-2xl bg-brand-50 text-brand-700">
         <IconCmp size={ICON.xl} />
       </span>
-      <p className="font-semibold text-slate-800">{title}</p>
+      <p className="font-bold text-slate-800">{title}</p>
       {children && <div className="text-sm text-slate-600">{children}</div>}
     </div>
   );
@@ -192,7 +192,7 @@ export function Alert({ tone = 'error', children }: { tone?: 'error' | 'info' | 
     warning: 'border-amber-200 bg-amber-50 text-amber-900',
   };
   return (
-    <div role={tone === 'error' ? 'alert' : undefined} className={cx('rounded-xl border px-3 py-2 text-sm', tones[tone])}>
+    <div role={tone === 'error' ? 'alert' : undefined} className={cx('rounded-2xl border px-3.5 py-2.5 text-sm', tones[tone])}>
       {children}
     </div>
   );
@@ -213,7 +213,7 @@ export function Segmented<T extends string>({
   disabled?: boolean;
 }) {
   return (
-    <div role="radiogroup" aria-label={label} className="flex rounded-xl bg-slate-200/70 p-1">
+    <div role="radiogroup" aria-label={label} className="flex rounded-2xl bg-slate-200/60 p-1">
       {options.map((option) => (
         <button
           key={option.value}
@@ -223,13 +223,29 @@ export function Segmented<T extends string>({
           disabled={disabled && value !== option.value}
           onClick={() => onChange(option.value)}
           className={cx(
-            'min-h-11 flex-1 rounded-lg px-2 text-sm font-semibold transition-colors',
-            value === option.value ? 'bg-white text-brand-800 shadow-sm' : 'text-slate-600 disabled:text-slate-400',
+            'min-h-11 flex-1 rounded-[14px] px-2 text-sm font-semibold transition-colors',
+            value === option.value ? 'bg-surface text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-800 disabled:text-slate-400',
           )}
         >
           {option.label}
         </button>
       ))}
+    </div>
+  );
+}
+
+/** Judul bagian di luar kartu, dengan tautan opsional di kanan ("Lihat semua"). */
+export function SectionHeader({ id, title, to, linkLabel }: { id: string; title: string; to?: string; linkLabel?: string }) {
+  return (
+    <div className="mb-2 flex items-center justify-between gap-2 px-1">
+      <h2 id={id} className="text-base font-bold tracking-tight">
+        {title}
+      </h2>
+      {to && linkLabel && (
+        <Link to={to} className="-my-2 inline-flex min-h-11 shrink-0 items-center gap-0.5 text-sm font-semibold whitespace-nowrap text-brand-700">
+          {linkLabel} <CaretRight size={ICON.sm} weight="bold" />
+        </Link>
+      )}
     </div>
   );
 }

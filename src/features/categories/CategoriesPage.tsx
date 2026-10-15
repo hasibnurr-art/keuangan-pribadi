@@ -58,7 +58,7 @@ export function CategoriesPage() {
         />
         {error && <Alert>{error}</Alert>}
 
-        <ul className="divide-y divide-slate-100 overflow-hidden rounded-2xl border border-slate-200 bg-white">
+        <ul className="divide-y divide-slate-100 overflow-hidden rounded-[20px] border border-slate-200 bg-surface">
           {active.map((category, index) => (
             <li key={category.id} className="flex items-center gap-1 pr-2">
               <button
@@ -85,10 +85,10 @@ export function CategoriesPage() {
 
         {archived.length > 0 && (
           <section aria-labelledby="archived-categories">
-            <h2 id="archived-categories" className="mb-2 px-1 text-sm font-semibold text-slate-600">
+            <h2 id="archived-categories" className="mb-2 px-1 text-base font-bold tracking-tight">
               Diarsipkan
             </h2>
-            <ul className="divide-y divide-slate-100 overflow-hidden rounded-2xl border border-slate-200 bg-white">
+            <ul className="divide-y divide-slate-100 overflow-hidden rounded-[20px] border border-slate-200 bg-surface">
               {archived.map((category) => (
                 <li key={category.id} className="flex min-h-14 items-center gap-3 px-4">
                   <CategoryBadge icon={category.icon} color={category.color} />

@@ -165,7 +165,7 @@ export function parseBackup(text: string): ParseResult {
       throw new BackupError('File ini bukan file backup yang valid (format JSON rusak).');
     }
     if (!isObj(raw) || raw.app !== BACKUP_APP_ID) {
-      throw new BackupError('File ini bukan backup dari aplikasi Keuangan Pribadi.');
+      throw new BackupError('File ini bukan backup dari aplikasi Dompet Waras.');
     }
     if (!isInt(raw.formatVersion, 1, BACKUP_FORMAT_VERSION) || !isInt(raw.schemaVersion, 1, Number.MAX_SAFE_INTEGER)) {
       throw new BackupError('Versi file backup tidak dikenal.');

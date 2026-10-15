@@ -192,7 +192,7 @@ export function BillFormPage() {
         </Field>
 
         {existing && (
-          <label className="flex min-h-11 items-start gap-3 rounded-xl border border-slate-200 bg-white p-3">
+          <label className="flex min-h-11 items-start gap-3 rounded-[14px] border border-slate-200 bg-surface p-3">
             <input
               type="checkbox"
               className="mt-0.5 size-5 accent-brand-700"
@@ -209,7 +209,7 @@ export function BillFormPage() {
         {failure && <Alert>{failure}</Alert>}
       </div>
 
-      <div className="sticky bottom-0 flex flex-col gap-2 border-t border-slate-200 bg-white px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+      <div className="sticky bottom-0 flex flex-col gap-2 border-t border-slate-200 bg-surface px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
         <Button type="submit" block disabled={saving}>
           {saving ? 'Menyimpan…' : 'Simpan tagihan'}
         </Button>

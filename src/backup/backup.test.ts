@@ -1,7 +1,6 @@
 import 'fake-indexeddb/auto';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { computeBalances, computeTotals } from '../domain/balance';
-import { shouldRemindBackup } from '../domain/backupReminder';
 import { monthSummary } from '../domain/report';
 import { saveAccount } from '../db/accounts';
 import { setBudgetLimit } from '../db/budgets';
@@ -186,32 +185,5 @@ describe('Ekspor CSV', () => {
     expect(sanitizeCell('@user')).toBe("'@user");
     expect(sanitizeCell('Makan "enak"; banyak')).toBe('"Makan ""enak""; banyak"');
     expect(sanitizeCell('biasa')).toBe('biasa');
-  });
-});
-
-describe('Pengingat backup', () => {
-  const base = {
-    hasData: true,
-    lastBackupAt: '2026-10-01T10:00:00.000Z',
-    lastDataChangeAt: '2026-10-12T10:00:00.000Z',
-    reminderDays: 7,
-    dismissedOn: null,
-    today: '2026-10-13',
-  };
-
-  it('tampil jika > 7 hari dan ada perubahan sejak backup terakhir', () => {
-    expect(shouldRemindBackup(base)).toBe(true);
-  });
-
-  it('tidak tampil jika belum lewat ambang, tidak ada perubahan, tanpa data, atau ditutup hari ini', () => {
-    expect(shouldRemindBackup({ ...base, lastBackupAt: '2026-10-08T10:00:00.000Z' })).toBe(false);
-    expect(shouldRemindBackup({ ...base, lastDataChangeAt: '2026-09-30T10:00:00.000Z' })).toBe(false);
-    expect(shouldRemindBackup({ ...base, hasData: false })).toBe(false);
-    expect(shouldRemindBackup({ ...base, dismissedOn: '2026-10-13' })).toBe(false);
-    expect(shouldRemindBackup({ ...base, dismissedOn: '2026-10-12' })).toBe(true);
-  });
-
-  it('belum pernah backup → selalu tampil selama ada data', () => {
-    expect(shouldRemindBackup({ ...base, lastBackupAt: null })).toBe(true);
   });
 });

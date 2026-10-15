@@ -106,7 +106,7 @@ export function AccountFields({
       </Field>
 
       {isAsset && (
-        <label className="flex min-h-11 items-start gap-3 rounded-xl border border-slate-200 bg-white p-3">
+        <label className="flex min-h-11 items-start gap-3 rounded-[14px] border border-slate-200 bg-surface p-3">
           <input
             type="checkbox"
             className="mt-0.5 size-5 accent-brand-700"

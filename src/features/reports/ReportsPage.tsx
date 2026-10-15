@@ -50,8 +50,9 @@ export function ReportsPage() {
           </Card>
         ) : (
           <>
-            <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
               <SummaryTile
+                dot="var(--color-series-income)"
                 label="Pemasukan"
                 value={summary.income}
                 change={compareValues(summary.income, previous.income)}
@@ -59,6 +60,7 @@ export function ReportsPage() {
                 to={`/transaksi?bulan=${month}&jenis=income`}
               />
               <SummaryTile
+                dot="var(--color-series-expense)"
                 label="Pengeluaran"
                 value={summary.expense}
                 change={compareValues(summary.expense, previous.expense)}
@@ -66,6 +68,7 @@ export function ReportsPage() {
                 to={`/transaksi?bulan=${month}&jenis=expense`}
               />
               <SummaryTile
+                wide
                 label="Selisih"
                 value={summary.net}
                 change={compareValues(summary.net, previous.net)}
@@ -74,7 +77,7 @@ export function ReportsPage() {
             </div>
 
             <Card>
-              <h2 className="text-sm font-semibold text-slate-600">Pengeluaran per kategori</h2>
+              <h2 className="text-base font-bold tracking-tight">Pengeluaran per kategori</h2>
               <p className="mb-2 text-xs text-slate-500">
                 Belanja kartu kredit dihitung saat belanja, bukan saat tagihan dibayar. Refund mengurangi kategori asal.
               </p>
@@ -86,7 +89,7 @@ export function ReportsPage() {
             </Card>
 
             <Card>
-              <h2 className="mb-3 text-sm font-semibold text-slate-600">Tren 6 bulan</h2>
+              <h2 className="mb-3 text-base font-bold tracking-tight">Tren 6 bulan</h2>
               <TrendChart data={trend} />
             </Card>
           </>
@@ -97,12 +100,16 @@ export function ReportsPage() {
 }
 
 function SummaryTile({
+  dot,
+  wide,
   label,
   value,
   change,
   previousLabel,
   to,
 }: {
+  dot?: string;
+  wide?: boolean;
   label: string;
   value: number;
   change: PeriodChange;
@@ -112,9 +119,12 @@ function SummaryTile({
   const hidden = useAmountsHidden();
   const body = (
     <>
-      <p className="text-sm text-slate-500">{label}</p>
-      <Money value={value} className="text-lg font-bold" />
-      <p className="mt-0.5 text-xs text-slate-500">
+      <p className="flex items-center gap-1.5 text-xs font-semibold text-slate-500">
+        {dot && <span aria-hidden className="size-2 rounded-full" style={{ background: dot }} />}
+        {label}
+      </p>
+      <Money value={value} prefix={wide && value > 0 ? '+' : ''} className="mt-0.5 block text-lg font-extrabold tracking-tight" />
+      <p className="mt-1 text-xs text-slate-500">
         {change.delta === 0 ? (
           `Sama dengan ${previousLabel}`
         ) : (
@@ -128,9 +138,9 @@ function SummaryTile({
       </p>
     </>
   );
-  const className = 'block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm';
+  const className = `block min-w-0 rounded-[20px] border border-slate-200 bg-surface p-4 ${wide ? 'col-span-2 sm:col-span-1' : ''}`;
   return to ? (
-    <Link to={to} className={`${className} hover:bg-slate-50`}>
+    <Link to={to} className={`${className} pressable`}>
       {body}
     </Link>
   ) : (

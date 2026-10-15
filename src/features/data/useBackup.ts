@@ -19,7 +19,6 @@ export function useBackup() {
       const result = await deliverFile(serializeBackup(backup), backupFileName(now), 'application/json');
       if (result === 'cancelled') return false;
       await setSetting(db, 'lastBackupAt', backup.exportedAt);
-      await setSetting(db, 'backupBannerDismissedOn', null);
       toast({
         message: result === 'shared' ? 'Backup dibagikan' : 'File backup diunduh. Simpan di tempat yang aman.',
         duration: 5_000,

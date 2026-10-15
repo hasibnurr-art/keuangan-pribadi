@@ -28,7 +28,6 @@ export async function restoreBackup(db: KeuanganDB, backup: BackupFile, hooks: R
       { key: 'onboardingDone', value: true },
       { key: 'lastBackupAt', value: backup.exportedAt },
       { key: 'lastDataChangeAt', value: backup.exportedAt },
-      { key: 'backupBannerDismissedOn', value: null },
     ]);
   });
 }

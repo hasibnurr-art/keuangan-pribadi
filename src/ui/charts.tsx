@@ -106,7 +106,7 @@ export function TrendChart({ data }: { data: TrendPoint[] }) {
             const x2 = cx0 + 1;
             return (
               <g key={d.month}>
-                {active === i && <rect x={margin.left + band * i} y={margin.top} width={band} height={plotH} fill="#f1f5f9" />}
+                {active === i && <rect x={margin.left + band * i} y={margin.top} width={band} height={plotH} fill="var(--color-slate-100)" />}
                 <path d={barPath(x1, y(d.income), barW, y(0) - y(d.income))} fill={SERIES.income} />
                 <path d={barPath(x2, y(d.expense), barW, y(0) - y(d.expense))} fill={SERIES.expense} />
                 <text x={cx0} y={height - 6} textAnchor="middle" fontSize={11} fill={AXIS_TEXT}>
@@ -129,7 +129,7 @@ export function TrendChart({ data }: { data: TrendPoint[] }) {
         {active !== null && (
           <div
             role="tooltip"
-            className="pointer-events-none absolute top-0 z-10 w-44 rounded-xl border border-slate-200 bg-white p-2.5 text-xs shadow-lg"
+            className="pointer-events-none absolute top-0 z-10 w-44 rounded-[14px] border border-slate-200 bg-surface p-2.5 text-xs shadow-lg"
             style={{
               // Di samping kelompok yang disorot agar tidak menutupi batangnya.
               left:
@@ -233,9 +233,9 @@ export function CategoryBars({ items }: { items: CategoryBarItem[] }) {
 // ---------------------------------------------------------------- Anggaran
 
 const STATUS_STYLE = {
-  ok: { fill: 'var(--color-good)', track: 'var(--color-good-tint)', icon: Check, label: 'Aman', ink: '#ffffff' },
-  warning: { fill: 'var(--color-warn)', track: 'var(--color-warn-tint)', icon: Warning, label: 'Hampir habis', ink: '#0f172a' },
-  over: { fill: 'var(--color-bad)', track: 'var(--color-bad-tint)', icon: X, label: 'Terlampaui', ink: '#ffffff' },
+  ok: { fill: 'var(--color-good)', track: 'var(--color-good-tint)', icon: Check, label: 'Aman', ink: 'var(--color-on-status)' },
+  warning: { fill: 'var(--color-warn)', track: 'var(--color-warn-tint)', icon: Warning, label: 'Hampir habis', ink: '#0a1112' },
+  over: { fill: 'var(--color-bad)', track: 'var(--color-bad-tint)', icon: X, label: 'Terlampaui', ink: 'var(--color-on-status)' },
 } as const;
 
 export function BudgetMeter({ status }: { status: BudgetStatus }) {

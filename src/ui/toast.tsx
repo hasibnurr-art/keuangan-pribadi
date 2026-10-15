@@ -35,18 +35,18 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       <div
         role="status"
         aria-live="polite"
-        className="pointer-events-none fixed inset-x-0 bottom-[calc(5.5rem+env(safe-area-inset-bottom))] z-50 flex justify-center px-4 lg:bottom-6"
+        className="pointer-events-none fixed inset-x-0 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-50 flex justify-center px-4 lg:bottom-6"
       >
         {toast && (
           <div
             key={toast.id}
-            className="pointer-events-auto flex w-full max-w-md items-center gap-3 rounded-xl bg-slate-900 px-4 py-3 text-sm text-white shadow-lg"
+            className="pointer-events-auto flex w-full max-w-md animate-rise items-center gap-3 rounded-2xl bg-inverse py-2 pr-2 pl-4 text-sm font-medium text-on-inverse shadow-xl"
           >
             <span className="flex-1">{toast.message}</span>
             {toast.actionLabel && toast.onAction && (
               <button
                 type="button"
-                className="min-h-11 rounded-lg px-3 font-semibold text-brand-200 hover:bg-white/10"
+                className="min-h-11 rounded-[14px] px-3 font-bold text-inverse-accent hover:bg-white/10"
                 onClick={async () => {
                   setToast(null);
                   await toast.onAction!();

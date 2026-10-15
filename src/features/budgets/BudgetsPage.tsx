@@ -95,7 +95,7 @@ export function BudgetsPage() {
               </dl>
             </Card>
 
-            <ul className="divide-y divide-slate-100 overflow-hidden rounded-2xl border border-slate-200 bg-white">
+            <ul className="divide-y divide-slate-100 overflow-hidden rounded-[20px] border border-slate-200 bg-surface">
               {rows.map(({ category, status }) => (
                 <li key={category.id} className="flex items-start gap-1 pr-1">
                   <Link

@@ -15,15 +15,15 @@ export function RouteError() {
       <p className="text-slate-600">
         Aplikasi mengalami masalah saat menampilkan halaman ini. Data Anda tetap tersimpan di perangkat.
       </p>
-      <p className="rounded-xl bg-slate-100 p-3 text-xs break-words text-slate-700">{message}</p>
+      <p className="rounded-[14px] bg-slate-100 p-3 text-xs break-words text-slate-700">{message}</p>
       <button
         type="button"
         onClick={() => window.location.reload()}
-        className="min-h-11 rounded-xl bg-brand-700 font-semibold text-white"
+        className="min-h-11 rounded-[14px] bg-brand-700 font-semibold text-on-brand"
       >
         Muat ulang
       </button>
-      <a href={SAFE_MODE_URL} className="min-h-11 rounded-xl border border-slate-300 bg-white py-3 text-center font-semibold">
+      <a href={SAFE_MODE_URL} className="min-h-11 rounded-[14px] border border-slate-300 bg-surface py-3 text-center font-semibold">
         Buka Mode aman (selamatkan data)
       </a>
       <p className="text-xs text-slate-500">Jika masalah berulang, kirim tangkapan layar halaman ini.</p>

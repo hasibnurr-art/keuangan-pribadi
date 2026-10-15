@@ -93,7 +93,7 @@ export function GoalDetailPage() {
       <div className="flex flex-col gap-4 p-4">
         <Card>
           <div className="flex items-center gap-3">
-            <span aria-hidden className="flex size-12 items-center justify-center rounded-full bg-brand-50 text-2xl">
+            <span aria-hidden className="flex size-12 items-center justify-center rounded-2xl bg-brand-50 text-2xl">
               {goal.icon}
             </span>
             <div className="min-w-0 flex-1">
@@ -110,7 +110,7 @@ export function GoalDetailPage() {
             <GoalProgressBar ratio={progress.ratio} status={schedule.status} />
           </div>
           <ScheduleLabel schedule={schedule} className="mt-2 text-sm" />
-          {milestone && <p className="mt-2 rounded-xl bg-emerald-50 px-3 py-2 text-sm text-emerald-900">{MILESTONE_MESSAGE[milestone]}</p>}
+          {milestone && <p className="mt-2 rounded-[14px] bg-emerald-50 px-3 py-2 text-sm text-emerald-900">{MILESTONE_MESSAGE[milestone]}</p>}
         </Card>
 
         {!progress.done && (
@@ -184,10 +184,10 @@ export function GoalDetailPage() {
 
         {related.length > 0 && (
           <section aria-labelledby="goal-tx">
-            <h2 id="goal-tx" className="mb-2 px-1 text-sm font-semibold text-slate-600">
+            <h2 id="goal-tx" className="mb-2 px-1 text-base font-bold tracking-tight">
               Riwayat terakhir
             </h2>
-            <ul className="divide-y divide-slate-100 overflow-hidden rounded-2xl border border-slate-200 bg-white">
+            <ul className="divide-y divide-slate-100 overflow-hidden rounded-[20px] border border-slate-200 bg-surface">
               {related.map((tx) => (
                 <li key={tx.id}>
                   <TransactionRow tx={tx} />

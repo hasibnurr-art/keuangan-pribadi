@@ -174,7 +174,7 @@ function NewGoal() {
           <TextInput type="month" value={targetMonth} min={thisMonth} onChange={(e) => setTargetMonth(e.target.value)} />
         </Field>
 
-        <fieldset className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4">
+        <fieldset className="flex flex-col gap-3 rounded-[20px] border border-slate-200 bg-surface p-4">
           <legend className="px-1 text-sm font-semibold text-slate-700">Disimpan di akun</legend>
           <Segmented
             label="Akun tabungan"
@@ -213,7 +213,7 @@ function NewGoal() {
           <p className="text-xs text-slate-500">Akun ini tidak akan dihitung di Uang tersedia agar tidak terpakai belanja.</p>
         </fieldset>
 
-        <fieldset className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4">
+        <fieldset className="flex flex-col gap-3 rounded-[20px] border border-slate-200 bg-surface p-4">
           <legend className="px-1 text-sm font-semibold text-slate-700">Setoran rutin</legend>
           <label className="flex min-h-11 items-start gap-3">
             <input type="checkbox" className="mt-0.5 size-5 accent-brand-700" checked={withDeposit} onChange={(e) => setWithDeposit(e.target.checked)} />
@@ -260,7 +260,7 @@ function NewGoal() {
 
         {failure && <Alert>{failure}</Alert>}
       </div>
-      <div className="sticky bottom-0 border-t border-slate-200 bg-white px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+      <div className="sticky bottom-0 border-t border-slate-200 bg-surface px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
         <Button type="submit" block disabled={saving}>
           {saving ? 'Menyimpan…' : 'Buat target'}
         </Button>
@@ -313,7 +313,7 @@ function EditGoal({ goalId }: { goalId: ID }) {
           lewat menu Tagihan.
         </p>
       </div>
-      <div className="sticky bottom-0 border-t border-slate-200 bg-white px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+      <div className="sticky bottom-0 border-t border-slate-200 bg-surface px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
         <Button type="submit" block disabled={saving}>
           {saving ? 'Menyimpan…' : 'Simpan'}
         </Button>

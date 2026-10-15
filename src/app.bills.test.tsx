@@ -68,7 +68,7 @@ describe('Tagihan rutin (M4)', () => {
   it('Beranda: tagihan tampil dan Uang tersedia dikurangi tagihan', async () => {
     await user.click(screen.getAllByRole('link', { name: 'Beranda' })[0]);
     await waitFor(() => expect(hero().textContent).toContain('Rp4.600.000'));
-    expect(hero().textContent).toContain('setelah tagihan');
+    expect(hero().textContent).toContain('Tagihan bulan ini−Rp400.000');
     const card = screen.getByRole('region', { name: 'Tagihan' });
     expect(within(card).getByText('Listrik')).toBeTruthy();
   });

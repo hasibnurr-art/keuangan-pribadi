@@ -61,7 +61,7 @@ export function AccountFormPage() {
           </div>
         )}
       </div>
-      <div className="sticky bottom-0 border-t border-slate-200 bg-white px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+      <div className="sticky bottom-0 border-t border-slate-200 bg-surface px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
         <Button type="submit" block disabled={saving}>
           {saving ? 'Menyimpan…' : 'Simpan akun'}
         </Button>

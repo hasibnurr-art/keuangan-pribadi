@@ -1,15 +1,17 @@
-# Keuangan Pribadi — catatan untuk melanjutkan proyek
+# Dompet Waras — catatan untuk melanjutkan proyek
 
-Aplikasi pencatat keuangan pribadi untuk pemilik dan keluarganya. Data tiap orang terpisah di perangkatnya sendiri, tanpa server dan tanpa database bersama. Spesifikasi lengkapnya ada di `docs/PRD.md` (v2.1); baca dulu sebelum menambah fitur.
+**Dompet Waras** (dulu "Keuangan Pribadi"; tagline "Tetap waras di tengah gempuran ekonomi."): aplikasi pencatat keuangan pribadi untuk pemilik dan keluarganya. Nama repo, URL, dan id backup `keuangan-pribadi` sengaja tidak diganti agar backup lama tetap bisa dipulihkan. Logo: dompet lime tersenyum dengan plester (`public/icon.svg`; PNG dibuat ulang dengan `npx pwa-assets-generator`). Data tiap orang terpisah di perangkatnya sendiri, tanpa server dan tanpa database bersama. Spesifikasi lengkapnya ada di `docs/PRD.md` (v2.1); baca dulu sebelum menambah fitur.
 
-- **Live:** https://hasibnurr-art.github.io/keuangan-pribadi/ (versi saat ini ada di `package.json`, terakhir 0.6.2)
+- **Live:** https://hasibnurr-art.github.io/keuangan-pribadi/ (versi saat ini ada di `package.json`, terakhir 0.7.0)
 - **Repo:** github.com/hasibnurr-art/keuangan-pribadi (publik, karena GitHub Pages gratis butuh repo publik)
 - **Pengguna:** bukan programmer, berkomunikasi dalam Bahasa Indonesia, dan biasanya menyerahkan keputusan teknis ("rekomendasi kamu saja"). Teks UI juga berbahasa Indonesia.
 
 ## Stack
 
 - React 19 + TypeScript strict + Vite 8 (`base: './'`) + HashRouter (react-router 8)
-- Tailwind v4 lewat `@tailwindcss/vite`; token warna ada di `@theme` di `src/index.css`
+- Tailwind v4 lewat `@tailwindcss/vite`; token warna ada di `@theme` di `src/index.css`. Merek teal (`brand-*`), netral `slate-*` (abu kehijauan), permukaan `bg-canvas`/`bg-surface` (jangan `bg-white`), teks di atas tombol merek `text-on-brand`
+- Mode gelap: `data-theme="dark"` di `<html>` (skrip di `index.html` + `src/app/theme.ts`, pilihan disimpan di localStorage `tema`). Di mode gelap token `slate-*`, `brand-*`, dan warna status dipetakan ulang di `src/index.css`, jadi komponen cukup memakai kelas biasa
+- Font Plus Jakarta Sans (`@fontsource-variable/plus-jakarta-sans`, dibundel agar offline)
 - Dexie 4 (IndexedDB) + dexie-react-hooks
 - vite-plugin-pwa (`registerType: 'prompt'`, menampilkan banner "Muat ulang" saat ada versi baru)
 - Vitest + fake-indexeddb + jsdom + Testing Library (TZ di-set Asia/Jakarta di `vitest.config.ts`)
@@ -58,12 +60,11 @@ Deploy otomatis: setiap push ke `main` menjalankan `.github/workflows/deploy.yml
 
 ## Status dan ide berikutnya
 
-Sudah selesai: M1–M6 PRD, Target tabungan, audit UI/UX (plugin ui-ux-pro-max), dan perbaikan bug hapus target (v0.6.2).
+Sudah selesai: M1–M6 PRD, Target tabungan, audit UI/UX (plugin ui-ux-pro-max), perbaikan bug hapus target (v0.6.2), dan desain ulang tampilan v0.7.0 (teal, Plus Jakarta Sans, mode gelap).
 
 Pengguna sudah memutuskan **form cicilan tidak perlu** untuk saat ini.
 
 Pilihan lanjutan yang pernah ditawarkan (belum dipilih):
-- mode gelap (token warna sudah siap)
 - kunci PIN
 - impor CSV
 - backup ke Google Drive

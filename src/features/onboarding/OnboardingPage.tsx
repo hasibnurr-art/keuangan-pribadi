@@ -3,17 +3,18 @@ import { useToday } from '../../app/data';
 import { validateAccount, type AccountErrors } from '../../domain/entityRules';
 import { db } from '../../db';
 import { completeOnboarding } from '../../db/onboarding';
+import { setSetting } from '../../db/settings';
 import { canPromptInstall, isIOS, isStandalone, onInstallAvailable, promptInstall, requestPersistentStorage } from '../../lib/platform';
-import { Alert, Button } from '../../ui/controls';
+import { Alert, Button, Field, TextInput } from '../../ui/controls';
 import { AccountFields, newAccountDraft } from '../accounts/AccountFields';
 import { RestorePanel } from '../data/RestorePanel';
-import { ICON, Wallet } from '../../ui/icons';
 
 type Step = 'welcome' | 'account' | 'install';
 
 export function OnboardingPage() {
   const today = useToday();
   const [step, setStep] = useState<Step>('welcome');
+  const [name, setName] = useState('');
   const [draft, setDraft] = useState(() => newAccountDraft(today));
   const [errors, setErrors] = useState<AccountErrors>({});
   const [saving, setSaving] = useState(false);
@@ -23,6 +24,7 @@ export function OnboardingPage() {
     setSaving(true);
     setFailure(null);
     try {
+      if (name.trim()) await setSetting(db, 'userName', name.trim());
       await completeOnboarding(db, draft, { today });
       await requestPersistentStorage();
     } catch (error) {
@@ -44,10 +46,11 @@ export function OnboardingPage() {
       {step === 'welcome' && (
         <div className="flex flex-1 flex-col gap-6">
           <div className="flex flex-1 flex-col justify-center gap-4">
-            <span className="flex size-16 items-center justify-center rounded-2xl bg-brand-800 text-white">
-              <Wallet size={ICON.xl} />
-            </span>
-            <h1 className="text-2xl font-bold text-brand-900">Selamat datang di Keuangan Pribadi</h1>
+            <img src="./icon.svg" alt="" className="size-24 rounded-[26px] shadow-[0_14px_30px_-12px_rgb(8_59_55/0.6)]" />
+            <div>
+              <h1 className="text-[1.75rem] leading-tight font-extrabold tracking-tight">Selamat datang di Dompet Waras</h1>
+              <p className="mt-1 font-semibold text-brand-700">Tetap waras di tengah gempuran ekonomi.</p>
+            </div>
             <p className="text-slate-600">
               Catat pemasukan, pengeluaran, dan utang Anda. Lihat berapa uang yang benar-benar bisa dipakai.
             </p>
@@ -81,6 +84,9 @@ export function OnboardingPage() {
               Mulai dari rekening atau dompet yang paling sering dipakai. Akun lain bisa ditambahkan nanti.
             </p>
           </div>
+          <Field label="Nama panggilan (opsional)" hint="Untuk sapaan di Beranda.">
+            <TextInput value={name} maxLength={30} autoComplete="given-name" placeholder="Contoh: Hasib" onChange={(e) => setName(e.target.value)} />
+          </Field>
           <AccountFields
             draft={draft}
             onChange={setDraft}
@@ -122,7 +128,7 @@ function InstallStep({ saving, failure, onFinish }: { saving: boolean; failure: 
       </div>
 
       {isIOS() ? (
-        <ol className="flex list-decimal flex-col gap-2 rounded-2xl border border-slate-200 bg-white p-4 pl-9 text-sm">
+        <ol className="flex list-decimal flex-col gap-2 rounded-[20px] border border-slate-200 bg-surface p-4 pl-9 text-sm">
           <li>
             Ketuk tombol <strong>Bagikan</strong> (kotak dengan panah ke atas) di Safari.
           </li>
@@ -138,7 +144,7 @@ function InstallStep({ saving, failure, onFinish }: { saving: boolean; failure: 
           Pasang aplikasi
         </Button>
       ) : (
-        <ol className="flex list-decimal flex-col gap-2 rounded-2xl border border-slate-200 bg-white p-4 pl-9 text-sm">
+        <ol className="flex list-decimal flex-col gap-2 rounded-[20px] border border-slate-200 bg-surface p-4 pl-9 text-sm">
           <li>
             Buka menu browser (<strong>⋮</strong>).
           </li>

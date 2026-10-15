@@ -1,5 +1,5 @@
 import { useLiveQuery } from 'dexie-react-hooks';
-import { useMemo, useState, type FormEvent } from 'react';
+import { useId, useMemo, useState, type FormEvent } from 'react';
 import { Navigate, useNavigate, useParams, useSearchParams } from 'react-router';
 import { useData } from '../../app/data';
 import { sortCategoriesByUsage } from '../../domain/history';
@@ -115,6 +115,7 @@ function TransactionForm({ existing }: { existing: Existing | null }) {
   const [errors, setErrors] = useState<FieldErrors>({});
   const [saving, setSaving] = useState(false);
   const [failure, setFailure] = useState<string | null>(null);
+  const amountId = useId();
 
   const categoryType = type === 'expense' || (type === 'income' && isRefund) ? 'expense' : 'income';
   const categoryChoices = useMemo(
@@ -209,9 +210,26 @@ function TransactionForm({ existing }: { existing: Existing | null }) {
         />
         {!isNew && <p className="-mt-3 text-xs text-slate-500">Jenis tidak bisa diubah. Hapus lalu buat baru bila perlu.</p>}
 
-        <Field label="Nominal" error={errors.amount}>
-          <AmountInput value={amount} onChange={setAmount} size="large" withThousands autoFocus={isNew} />
-        </Field>
+        <div className="flex flex-col items-center gap-1 py-2 text-center">
+          <label htmlFor={amountId} className="text-sm font-semibold text-slate-500">
+            Nominal
+          </label>
+          <AmountInput
+            id={amountId}
+            value={amount}
+            onChange={setAmount}
+            size="hero"
+            withThousands
+            autoFocus={isNew}
+            aria-invalid={!!errors.amount}
+            aria-describedby={errors.amount ? `${amountId}-error` : undefined}
+          />
+          {errors.amount && (
+            <p id={`${amountId}-error`} className="text-sm text-red-700">
+              {errors.amount}
+            </p>
+          )}
+        </div>
 
         {type === 'transfer' ? (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -229,7 +247,7 @@ function TransactionForm({ existing }: { existing: Existing | null }) {
         )}
 
         {type === 'income' && (
-          <label className="flex min-h-11 items-start gap-3 rounded-xl border border-slate-200 bg-white p-3">
+          <label className="flex min-h-11 items-start gap-3 rounded-[14px] border border-slate-200 bg-surface p-3.5">
             <input
               type="checkbox"
               className="mt-0.5 size-5 accent-brand-700"
@@ -254,11 +272,11 @@ function TransactionForm({ existing }: { existing: Existing | null }) {
         )}
 
         {type === 'transfer' && (
-          <div className="rounded-xl border border-slate-200 bg-white">
+          <div className="rounded-[14px] border border-slate-200 bg-surface">
             <button
               type="button"
               aria-expanded={feeOpen}
-              className="flex min-h-11 w-full items-center justify-between px-3 text-sm font-medium"
+              className="flex min-h-12 w-full items-center justify-between px-3.5 text-sm font-semibold"
               onClick={() => setFeeOpen(!feeOpen)}
             >
               <span className="inline-flex items-center gap-1.5">
@@ -299,8 +317,8 @@ function TransactionForm({ existing }: { existing: Existing | null }) {
                 aria-pressed={date === chip.value}
                 onClick={() => setDate(chip.value)}
                 className={cx(
-                  'min-h-11 rounded-xl border px-4 text-sm font-medium',
-                  date === chip.value ? 'border-brand-600 bg-brand-50 text-brand-800' : 'border-slate-300 bg-white text-slate-700',
+                  'min-h-11 rounded-full border px-4 text-sm font-semibold transition-colors',
+                  date === chip.value ? 'border-brand-600 bg-brand-50 text-brand-800' : 'border-slate-200 bg-surface text-slate-600',
                 )}
               >
                 {chip.label}
@@ -324,8 +342,8 @@ function TransactionForm({ existing }: { existing: Existing | null }) {
         {failure && <Alert>{failure}</Alert>}
       </div>
 
-      <div className="sticky bottom-0 flex flex-col gap-2 border-t border-slate-200 bg-white px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
-        <Button type="submit" block disabled={saving}>
+      <div className="sticky bottom-0 flex flex-col gap-2 bg-canvas/95 px-4 pt-3 pb-[calc(1rem+env(safe-area-inset-bottom))] backdrop-blur-md">
+        <Button type="submit" block disabled={saving} className="min-h-14 rounded-2xl text-base font-bold">
           {saving ? 'Menyimpan…' : 'Simpan'}
         </Button>
         {!isNew && (
@@ -353,7 +371,7 @@ function CategoryPicker({
 }) {
   return (
     <fieldset className="flex flex-col gap-1.5" aria-describedby={error ? 'category-error' : undefined}>
-      <legend className="mb-1.5 text-sm font-medium text-slate-700">{label}</legend>
+      <legend className="mb-2 text-sm font-semibold text-slate-700">{label}</legend>
       <div className="grid grid-cols-4 gap-2 sm:grid-cols-5">
         {categories.map((c) => (
           <button
@@ -362,11 +380,11 @@ function CategoryPicker({
             aria-pressed={value === c.id}
             onClick={() => onChange(c.id)}
             className={cx(
-              'flex min-h-20 flex-col items-center justify-center gap-1 rounded-xl border p-1.5 text-center text-xs leading-tight',
-              value === c.id ? 'border-brand-600 bg-brand-50 font-semibold text-brand-900 ring-1 ring-brand-600' : 'border-slate-200 bg-white text-slate-700',
+              'flex min-h-[5.5rem] flex-col items-center justify-center gap-1.5 rounded-2xl border-[1.5px] p-1.5 text-center text-xs leading-tight font-semibold transition-colors',
+              value === c.id ? 'border-brand-600 bg-brand-50 text-slate-900' : 'border-transparent text-slate-600 hover:bg-slate-100',
             )}
           >
-            <CategoryBadge icon={c.icon} color={c.color} size="sm" />
+            <CategoryBadge icon={c.icon} color={c.color} />
             <span className="line-clamp-2">{c.name}</span>
           </button>
         ))}
@@ -396,7 +414,7 @@ function AdjustmentDetail({ tx }: { tx: Transaction }) {
     <>
       <PageHeader title="Penyesuaian saldo" back />
       <div className="flex flex-col gap-4 p-4">
-        <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 rounded-2xl border border-slate-200 bg-white p-4 text-sm">
+        <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 rounded-[20px] border border-slate-200 bg-surface p-4 text-sm">
           <dt className="text-slate-500">Akun</dt>
           <dd className="font-medium">{accountsById.get(tx.accountId)?.name}</dd>
           <dt className="text-slate-500">Tanggal</dt>

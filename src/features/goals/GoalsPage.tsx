@@ -32,7 +32,7 @@ export function GoalsPage() {
           </Card>
         ) : (
           <>
-            <ul className="divide-y divide-slate-100 overflow-hidden rounded-2xl border border-slate-200 bg-white">
+            <ul className="divide-y divide-slate-100 overflow-hidden rounded-[20px] border border-slate-200 bg-surface">
               {active.map((goal) => (
                 <li key={goal.id}>
                   <GoalCard goal={goal} />
@@ -60,7 +60,7 @@ export function GoalsPage() {
               {showArchived ? 'Sembunyikan target selesai' : `Tampilkan ${archived.length} target selesai/diarsipkan`}
             </button>
             {showArchived && (
-              <ul className="mt-2 divide-y divide-slate-100 overflow-hidden rounded-2xl border border-slate-200 bg-white opacity-80">
+              <ul className="mt-2 divide-y divide-slate-100 overflow-hidden rounded-[20px] border border-slate-200 bg-surface opacity-80">
                 {archived.map((goal) => (
                   <li key={goal.id}>
                     <GoalCard goal={goal} />

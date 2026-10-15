@@ -17,6 +17,12 @@ export function formatDisplayDate(date: LocalDate): string {
   return `${d} ${MONTHS[m - 1]} ${y}`;
 }
 
+/** `2026-10-13` → `13 Okt` (tanpa tahun, untuk tanggal dekat). */
+export function formatDayMonth(date: LocalDate): string {
+  const [, m, d] = date.split('-').map(Number);
+  return `${d} ${MONTHS[m - 1]}`;
+}
+
 /** `2026-10` → `Okt`. */
 export function formatMonthShort(ym: YearMonth): string {
   return MONTHS[Number(ym.slice(5, 7)) - 1];

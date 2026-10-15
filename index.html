@@ -5,11 +5,20 @@
     <link rel="icon" href="./favicon.ico" sizes="48x48" />
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <link rel="apple-touch-icon" href="./apple-touch-icon-180x180.png" />
-    <meta name="apple-mobile-web-app-title" content="Keuangan" />
-    <meta name="description" content="Catat dan pahami keuangan pribadi. Data hanya tersimpan di perangkat Anda." />
+    <meta name="apple-mobile-web-app-title" content="Dompet Waras" />
+    <meta name="description" content="Tetap waras di tengah gempuran ekonomi. Catat keuangan pribadi; data hanya tersimpan di perangkat Anda." />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#173b66" />
-    <title>Keuangan Pribadi</title>
+    <meta name="theme-color" content="#f3f6f5" />
+    <script>
+      // Terapkan tema sebelum aplikasi dimuat agar tidak berkedip (lihat src/app/theme.ts).
+      try {
+        var t = localStorage.getItem('tema');
+        var dark = t === 'dark' || (t !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+        if (dark) document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0a1112');
+      } catch (e) {}
+    </script>
+    <title>Dompet Waras</title>
   </head>
   <body>
     <div id="root"></div>

@@ -43,8 +43,8 @@ export function CategoryBadge({ icon, color, size = 'md' }: { icon: string | Ico
     <span
       aria-hidden
       className={cx(
-        'flex shrink-0 items-center justify-center rounded-full',
-        size === 'md' ? 'size-10 text-xl' : 'size-8 text-base',
+        'flex shrink-0 items-center justify-center',
+        size === 'md' ? 'size-10 rounded-[13px] text-xl' : 'size-8 rounded-[10px] text-base',
         COLOR_CLASSES[color] ?? COLOR_CLASSES.slate,
       )}
     >

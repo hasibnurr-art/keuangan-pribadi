@@ -54,12 +54,10 @@ afterAll(async () => {
 const hero = () => screen.getByRole('button', { name: /Uang tersedia/ });
 
 describe('Backup & data (M5)', () => {
-  it('Beranda mengingatkan backup; bisa ditutup untuk hari ini', async () => {
+  it('Beranda tidak menampilkan pengingat backup (backup dilakukan mandiri)', async () => {
     render(<App />);
-    const banner = await screen.findByRole('region', { name: 'Pengingat backup' });
-    expect(within(banner).getByText('Anda belum pernah backup')).toBeTruthy();
-    await user.click(within(banner).getByRole('button', { name: 'Tutup pengingat untuk hari ini' }));
-    await waitFor(() => expect(screen.queryByRole('region', { name: 'Pengingat backup' })).toBeNull());
+    await screen.findByRole('button', { name: /Uang tersedia/ });
+    expect(screen.queryByText(/belum pernah backup/)).toBeNull();
   });
 
   it('Backup sekarang menghasilkan file JSON lengkap dan mencatat waktu backup', async () => {
@@ -120,11 +118,17 @@ describe('Backup & data (M5)', () => {
     await waitFor(() => expect(hero().textContent).toContain('Rp1.950.000'));
   });
 
-  it('Pengaturan: ambang pengingat dan versi aplikasi', async () => {
+  it('Pengaturan: nama panggilan untuk sapaan, backup mandiri, dan versi aplikasi', async () => {
     await user.click(screen.getAllByRole('link', { name: 'Lainnya' })[0]);
     await user.click(await screen.findByRole('link', { name: /^Pengaturan/ }));
-    await user.selectOptions(await screen.findByLabelText('Ingatkan backup jika sudah lewat'), '14');
-    await waitFor(async () => expect((await db.settings.get('backupReminderDays'))?.value).toBe(14));
+    await user.type(await screen.findByLabelText('Nama panggilan'), 'Hasib');
+    await user.tab();
+    await waitFor(async () => expect((await db.settings.get('userName'))?.value).toBe('Hasib'));
+    expect(screen.getByRole('button', { name: 'Backup sekarang' })).toBeTruthy();
+    expect(screen.getByText(/Backup terakhir hari ini/)).toBeTruthy();
     expect(screen.getByText(/versi \d+\.\d+\.\d+/)).toBeTruthy();
+
+    await user.click(screen.getAllByRole('link', { name: 'Beranda' })[0]);
+    expect(await screen.findByText('Hasib')).toBeTruthy();
   });
 });

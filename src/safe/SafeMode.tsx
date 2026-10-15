@@ -60,7 +60,7 @@ export function SafeMode() {
     await load();
   }
 
-  const box = 'rounded-2xl border border-slate-200 bg-white p-4';
+  const box = 'rounded-[20px] border border-slate-200 bg-surface p-4';
   return (
     <main className="mx-auto flex min-h-dvh max-w-md flex-col gap-4 px-4 pt-[calc(1.5rem+env(safe-area-inset-top))] pb-8 text-sm">
       <div>
@@ -72,7 +72,7 @@ export function SafeMode() {
 
       <section className={box}>
         <h2 className="mb-2 font-semibold">1. Selamatkan data</h2>
-        <button type="button" onClick={backup} className="min-h-11 w-full rounded-xl bg-brand-700 font-semibold text-white">
+        <button type="button" onClick={backup} className="min-h-11 w-full rounded-[14px] bg-brand-700 font-semibold text-on-brand">
           Unduh backup
         </button>
         {status && <p className="mt-2 text-slate-700">{status}</p>}
@@ -127,7 +127,7 @@ export function SafeMode() {
         </section>
       )}
 
-      <a href="./" className="min-h-11 rounded-xl border border-slate-300 bg-white py-3 text-center font-semibold">
+      <a href="./" className="min-h-11 rounded-[14px] border border-slate-300 bg-surface py-3 text-center font-semibold">
         Kembali ke aplikasi
       </a>
       <p className="text-center text-xs text-slate-500">Versi {__APP_VERSION__}</p>

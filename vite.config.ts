@@ -19,16 +19,16 @@ export default defineConfig({
       // Ikon sudah tercakup globPatterns; hindari entri precache ganda.
       includeManifestIcons: false,
       manifest: {
-        name: 'Keuangan Pribadi',
-        short_name: 'Keuangan',
-        description: 'Catat dan pahami keuangan pribadi. Data hanya tersimpan di perangkat Anda.',
+        name: 'Dompet Waras',
+        short_name: 'Dompet Waras',
+        description: 'Tetap waras di tengah gempuran ekonomi. Catat keuangan pribadi; data hanya tersimpan di perangkat Anda.',
         lang: 'id',
         start_url: './',
         scope: './',
         display: 'standalone',
         orientation: 'portrait',
-        background_color: '#f8fafc',
-        theme_color: '#173b66',
+        background_color: '#f3f6f5',
+        theme_color: '#0b6a60',
         icons: [
           { src: 'pwa-64x64.png', sizes: '64x64', type: 'image/png' },
           { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
@@ -38,7 +38,7 @@ export default defineConfig({
       },
       workbox: {
         // Precache seluruh aset: aplikasi berjalan 100% offline setelah kunjungan pertama.
-        globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
+        globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2}'],
         navigateFallback: 'index.html',
         cleanupOutdatedCaches: true,
       },

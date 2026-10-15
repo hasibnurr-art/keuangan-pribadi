@@ -114,7 +114,7 @@ export function AccountDetailPage() {
         )}
 
         <section aria-labelledby="account-tx">
-          <h2 id="account-tx" className="mb-2 flex items-center justify-between px-1 text-sm font-semibold text-slate-600">
+          <h2 id="account-tx" className="mb-2 flex items-center justify-between px-1 text-base font-bold tracking-tight">
             <span>Transaksi</span>
             {related.length > RECENT_LIMIT && (
               <ButtonLink to={`/transaksi?akun=${account.id}`} variant="ghost" className="min-h-11">
@@ -127,7 +127,7 @@ export function AccountDetailPage() {
               <EmptyState icon={Receipt} title="Belum ada transaksi di akun ini" />
             </Card>
           ) : (
-            <ul className="divide-y divide-slate-100 overflow-hidden rounded-2xl border border-slate-200 bg-white">
+            <ul className="divide-y divide-slate-100 overflow-hidden rounded-[20px] border border-slate-200 bg-surface">
               {related.slice(0, RECENT_LIMIT).map((tx) => (
                 <li key={tx.id}>
                   <TransactionRow tx={tx} />
@@ -228,7 +228,7 @@ function AdjustDialog({
         <Field label={isLiability ? 'Jumlah terutang sebenarnya' : 'Saldo sebenarnya'}>
           <AmountInput value={actual} onChange={setActual} size="large" autoFocus />
         </Field>
-        <dl className="grid grid-cols-[1fr_auto] gap-y-1 rounded-xl bg-slate-50 p-3 text-sm">
+        <dl className="grid grid-cols-[1fr_auto] gap-y-1 rounded-[14px] bg-slate-50 p-3 text-sm">
           <dt className="text-slate-500">Di aplikasi</dt>
           <dd>
             <Money value={balance} />

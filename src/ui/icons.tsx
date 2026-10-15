@@ -3,6 +3,17 @@
 // konten pilihan pengguna (ikon kategori/target), tidak untuk ikon sistem.
 
 import type { IconProps } from '@phosphor-icons/react/dist/lib/types';
+import { ArrowDownLeft } from '@phosphor-icons/react/dist/csr/ArrowDownLeft';
+import { ArrowUpRight } from '@phosphor-icons/react/dist/csr/ArrowUpRight';
+import { CalendarBlank } from '@phosphor-icons/react/dist/csr/CalendarBlank';
+import { CircleHalf } from '@phosphor-icons/react/dist/csr/CircleHalf';
+import { CloudArrowUp } from '@phosphor-icons/react/dist/csr/CloudArrowUp';
+import { Info } from '@phosphor-icons/react/dist/csr/Info';
+import { ListBullets } from '@phosphor-icons/react/dist/csr/ListBullets';
+import { Moon } from '@phosphor-icons/react/dist/csr/Moon';
+import { SquaresFour } from '@phosphor-icons/react/dist/csr/SquaresFour';
+import { Sun } from '@phosphor-icons/react/dist/csr/Sun';
+import { WarningCircle } from '@phosphor-icons/react/dist/csr/WarningCircle';
 import { ArrowsLeftRight } from '@phosphor-icons/react/dist/csr/ArrowsLeftRight';
 import { Bank } from '@phosphor-icons/react/dist/csr/Bank';
 import { CaretDown } from '@phosphor-icons/react/dist/csr/CaretDown';
@@ -48,6 +59,17 @@ export type Icon = ComponentType<IconProps>;
 export const ICON = { xs: 12, sm: 16, md: 20, lg: 24, xl: 32 } as const;
 
 export {
+  ArrowDownLeft,
+  ArrowUpRight,
+  CalendarBlank,
+  CircleHalf,
+  CloudArrowUp,
+  Info,
+  ListBullets,
+  Moon,
+  SquaresFour,
+  Sun,
+  WarningCircle,
   ArrowsLeftRight,
   CaretDown,
   CaretLeft,
@@ -100,8 +122,8 @@ export function AccountKindBadge({ kind, size = 'md' }: { kind: AccountKind; siz
       aria-hidden
       className={
         size === 'lg'
-          ? 'flex size-12 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-700'
-          : 'flex size-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-700'
+          ? 'flex size-12 shrink-0 items-center justify-center rounded-2xl bg-slate-100 text-slate-700'
+          : 'flex size-10 shrink-0 items-center justify-center rounded-[14px] bg-slate-100 text-slate-700'
       }
     >
       <KindIcon size={size === 'lg' ? ICON.lg : ICON.md} />

@@ -1,4 +1,6 @@
-# Keuangan Pribadi
+# Dompet Waras
+
+> Tetap waras di tengah gempuran ekonomi.
 
 PWA pencatat keuangan pribadi yang berjalan sepenuhnya di perangkat (tanpa server). Spesifikasi lengkap: [docs/PRD.md](docs/PRD.md).
 

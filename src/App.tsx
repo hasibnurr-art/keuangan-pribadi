@@ -35,18 +35,19 @@ function Splash() {
   }, []);
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center gap-4 px-6 text-center text-slate-500" role="status">
-      <p>Memuat…</p>
+      <img src="./icon.svg" alt="" className="size-20 animate-pulse rounded-[22px]" />
+      <p className="font-semibold">Dompet Waras</p>
       {slow && (
         <div className="flex max-w-xs flex-col gap-2 text-sm">
           <p className="text-slate-700">Aplikasi belum merespons. Data Anda tetap tersimpan.</p>
           <button
             type="button"
             onClick={() => window.location.reload()}
-            className="min-h-11 rounded-xl bg-brand-700 font-semibold text-white"
+            className="min-h-11 rounded-[14px] bg-brand-700 font-semibold text-on-brand"
           >
             Muat ulang
           </button>
-          <a href={SAFE_MODE_URL} className="min-h-11 rounded-xl border border-slate-300 bg-white py-3 font-semibold text-slate-800">
+          <a href={SAFE_MODE_URL} className="min-h-11 rounded-[14px] border border-slate-300 bg-surface py-3 font-semibold text-slate-800">
             Buka Mode aman
           </a>
         </div>
